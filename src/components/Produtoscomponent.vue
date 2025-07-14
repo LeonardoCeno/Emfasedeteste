@@ -17,11 +17,9 @@
     </div>
     <button v-if="!mostrarTodos && produtos.length > 8" class="mostrar-mais" @click="mostrarTodos = true">Mostrar mais</button>
 </div>
-
 </div>
 
 </template>
-
 
 <script setup>
 import { ref, onMounted, computed } from 'vue'
@@ -65,7 +63,7 @@ const produtosVisiveis = computed(() => {
     margin-top: 20px;
     background-color: #06080a;
     height: 9vh;
-    width: 77vw;
+    width: 87vw;
     margin-bottom: 70px;
 }
 
@@ -75,7 +73,7 @@ const produtosVisiveis = computed(() => {
 }
 
 .produtos {
-    width: 77vw;
+    width: 87vw;
 }
 
 .produto {

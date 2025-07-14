@@ -18,4 +18,34 @@ export async function getProdutos() {
   return produtos
 }
 
+// Variável para armazenar o token apenas em memória
+let sessionToken = null
+
+// Função para login
+export async function login(email, password) {
+  const response = await api.post('/login', { email, password })
+  // O token vem em response.data.token
+  const token = response.data.token
+  if (token) {
+    localStorage.setItem('token', token)
+    api.defaults.headers.common['Authorization'] = `Bearer ${token}`
+  }
+  return response.data
+}
+
+// Função para cadastro
+export async function register(name, email, password) {
+  const response = await api.post('/register', { name, email, password })
+  return response.data
+}
+
+// Configurar o axios para usar o token salvo, se existir
+const token = localStorage.getItem('token')
+if (token) {
+  api.defaults.headers.common['Authorization'] = `Bearer ${token}`
+}
+
+// Remove configuração de uso do localStorage
+
 // Outras funções para produtos, categorias, etc, podem ser adicionadas aqui futuramente. 
+export default api 

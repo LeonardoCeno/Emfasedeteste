@@ -1,6 +1,5 @@
 <template>
     <div class="fixador" >
-    <div class="whitebar"></div>
     <header>
         <a class="logo desktop" href="">
         <img src="../components/img/LOGOMANYA-Photoroom.png" alt="" />
@@ -11,17 +10,29 @@
         </div>
         <div class="botoes desktop">
             <button>
-                <p>Entrar</p>
-                <img src="../components/img/usuariofinal.png" alt="" />
+            <p>Carrinho</p>
+            <img src="../components/img/carrinhofinal.png" alt="" />
             </button>
             <button>
                 <p>Pedidos</p>
                 <img src="../components/img/listafinal.png" alt="" />
             </button>
+            <router-link v-if="!isLoggedIn" to="/login">   
             <button>
-            <p>Carrinho</p>
-            <img src="../components/img/carrinhofinal.png" alt="" />
+                <p>Entrar</p>
+                <img src="../components/img/usuariofinal.png" alt="" />
             </button>
+            </router-link>
+            <div v-else class="conta-dropdown-wrapper" @mouseenter="showDropdown = true" @mouseleave="showDropdown = false" style="position: relative; display: inline-block;">
+                <button>
+                    <p>Conta</p>
+                    <img src="../components/img/usuariofinal.png" alt="" />
+                </button>
+                <div v-if="showDropdown" class="conta-dropdown-menu">
+                    <button @click="goToDados">Dados</button>
+                    <button @click="logout">Sair</button>
+                </div>
+            </div>
         </div>
         <div class="topo-mobile mobile">
             <a class="logo" href="">
@@ -60,7 +71,28 @@
 </div>
 </template>
 
-<script setup></script>
+<script setup>
+import { ref, computed } from 'vue'
+import api from '../services/api'
+import { useRouter } from 'vue-router'
+
+// Função para checar se o usuário está logado (token em memória)
+const isLoggedIn = computed(() => !!api.defaults.headers.common['Authorization'])
+const showDropdown = ref(false)
+const router = useRouter()
+
+function logout() {
+    localStorage.removeItem('token')
+    delete api.defaults.headers.common['Authorization']
+    showDropdown.value = false
+    window.location.reload()
+}
+
+function goToDados() {
+    showDropdown.value = false
+    router.push('/dados')
+}
+</script>
 
 <style scoped>
 
@@ -77,7 +109,7 @@ header {
     align-items: center;
     justify-content: center;
     background: #ffffffd7;
-    min-height: 16vh;
+    min-height: 12vh;
     gap: 6vw;
     flex-wrap: wrap;
     padding: 10px;
@@ -92,7 +124,7 @@ header {
 
 .logo img {
     width: auto;
-    height: 14vh;
+    height: 12vh;
     filter: invert(1);
 }
 
@@ -288,9 +320,34 @@ button:hover img {
     }
 }
 
-.whitebar {
-    height: 30px;
-    background: #f8f9fa;
-
+.conta-dropdown-menu {
+    position: absolute;
+    top: 32px;
+    background: #fff;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    min-width: 150px;
+    z-index: 100;
+    display: flex;
+    flex-direction: column;
+    padding: 8px 0;
+    margin-top: 4px;
+    border: 1px, solid #000000;
 }
+.conta-dropdown-menu button {
+
+    color: #000000;
+    padding: 10px 18px;
+    text-align: left;
+    width: 100%;
+    font-size: 15px;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+.conta-dropdown-menu button:hover {
+    color: #079ac7;
+    transition: color 0.2s ease;
+}
+
 </style>
