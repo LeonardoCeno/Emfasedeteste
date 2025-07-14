@@ -1,7 +1,7 @@
 <template>
     <div class="fixador" >
     <header>
-        <a class="logo desktop" href="">
+        <a class="logo desktop" href="/">
         <img src="../components/img/LOGOMANYA-Photoroom.png" alt="" />
         </a>
         <div class="input desktop">
@@ -39,10 +39,22 @@
             <img src="../components/img/ManyaLogo-Photoroom.png" alt="" />
             </a>
             <div class="botoes">
-                <button>
+                <router-link v-if="!isLoggedIn" to="/login">   
+            <button>
                 <p>Entrar</p>
                 <img src="../components/img/usuariofinal.png" alt="" />
+            </button>
+            </router-link>
+            <div v-else class="conta-dropdown-wrapper" @mouseenter="showDropdown = true" @mouseleave="showDropdown = false" style="position: relative; display: inline-block;">
+                <button>
+                    <p>Conta</p>
+                    <img src="../components/img/usuariofinal.png" alt="" />
                 </button>
+                <div v-if="showDropdown" class="conta-dropdown-menu">
+                    <button @click="goToDados">Dados</button>
+                    <button @click="logout">Sair</button>
+                </div>
+            </div>
                 <button>
                 <p>Pedidos</p>
                 <img src="../components/img/listafinal.png" alt="" />
@@ -60,13 +72,27 @@
     </header>
 
     <div class="Categorias">
-        <a href=""> <img src="../components/img/listafinal.png" alt=""> <p>Categorias</p></a>
-        <a href=""> <img src="../components/img/Lancamentofinal-Photoroom.png" alt=""> <p>Lançamentos</p></a>
-        <a href=""> <img src="../components/img//Livrofinalverdadeiro-Photoroom.png" alt=""> <p>Livros</p></a>
-        <a href=""> <img src="../components/img/mangáfinal.png" alt=""> <p>Mangás</p></a>
-        <a href=""> <img src="../components/img/pincel.png" alt=""> <p>Artbooks</p></a>
-        <a href=""> <img src="../components/img/ofertasfinal.png" alt=""> <p>Ofertas</p></a>
-        <a href=""> <img src="../components/img/Tudofinal-Photoroom.png" alt=""> <p>Tudo</p></a>
+        <div class="categorias-dropdown-wrapper" @mouseenter="showCategoriasDropdown = true" @mouseleave="showCategoriasDropdown = false" style="position: relative; display: inline-block;">
+            <button href="#">
+                <img src="../components/img/listafinal.png" alt=""> <p>Categorias</p>
+            </button>
+            <div v-if="showCategoriasDropdown" class="categorias-dropdown-menu">
+                <button @click="() => {}">Ação</button>
+                <button @click="() => {}">Ficção</button>
+                <button @click="() => {}">Romance</button>
+                <button @click="() => {}">Livros</button>
+                <button @click="() => {}">Mangás</button>
+                <button @click="() => {}">Artbooks</button>
+                <button @click="() => {}">Ofertas</button>
+                <button @click="() => {}">Tudo</button>
+            </div>
+        </div>
+        <button href=""> <img src="../components/img/Lancamentofinal-Photoroom.png" alt=""> <p>Lançamentos</p></button>
+        <button href=""> <img src="../components/img//Livrofinalverdadeiro-Photoroom.png" alt=""> <p>Livros</p></button>
+        <button href=""> <img src="../components/img/mangáfinal.png" alt=""> <p>Mangás</p></button>
+        <button href=""> <img src="../components/img/pincel.png" alt=""> <p>Artbooks</p></button>
+        <button href=""> <img src="../components/img/ofertasfinal.png" alt=""> <p>Ofertas</p></button>
+        <button href=""> <img src="../components/img/Tudofinal-Photoroom.png" alt=""> <p>Tudo</p></button>
     </div>
 </div>
 </template>
@@ -79,6 +105,7 @@ import { useRouter } from 'vue-router'
 // Função para checar se o usuário está logado (token em memória)
 const isLoggedIn = computed(() => !!api.defaults.headers.common['Authorization'])
 const showDropdown = ref(false)
+const showCategoriasDropdown = ref(false)
 const router = useRouter()
 
 function logout() {
@@ -95,14 +122,6 @@ function goToDados() {
 </script>
 
 <style scoped>
-
-.fixador {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    z-index: 1000;
-}
 
 header {
     display: flex;
@@ -186,6 +205,7 @@ button {
     transition: color 0.2s ease;
     font-weight: 500;
     font-size: 14px;
+    height: 55px;
 }
 
 button:hover {
@@ -262,7 +282,6 @@ button:hover img {
     }
 }
 
-
 .Categorias {
     display: flex;
     justify-content: center;
@@ -272,7 +291,6 @@ button:hover img {
     color: #ffffff;
     font-size: 14px;
     gap: 70px;
-
 }
 
 .Categorias img {
@@ -283,27 +301,29 @@ button:hover img {
     transition: all 0.3s ease;
 }
 
-.Categorias a {
+.Categorias button {
     display: flex;
     align-items: center;
     gap: 7px;
     padding: 5px 10px;
     border-radius: 10px;
     transition: color 0.2s ease;
+    color: white;
+    height: 55px;
 }
 
-.Categorias a:hover {
+.Categorias button:hover {
     color: #63b3ed;
 }
 
-.Categorias a:hover img {
+.Categorias button:hover img {
     filter: brightness(0) invert(45%) sepia(65%) saturate(1050%) hue-rotate(160deg) brightness(115%) contrast(100%);
 }
 
 @media (max-width: 950px) {
-    .Categorias a:nth-child(3),
-    .Categorias a:nth-child(5),
-    .Categorias a:nth-child(4) {
+    .Categorias button:nth-child(3),
+    .Categorias button:nth-child(5),
+    .Categorias button:nth-child(4) {
         display: none;
     }
     .Categorias {
@@ -312,7 +332,7 @@ button:hover img {
 }
 
 @media (max-width: 550px) {
-    .Categorias a:nth-child(6) {
+    .Categorias button:nth-child(6) {
         display: none;
     }
     .Categorias {
@@ -322,10 +342,9 @@ button:hover img {
 
 .conta-dropdown-menu {
     position: absolute;
-    top: 32px;
+    top: 51px;
     background: #fff;
     border: 1px solid #e5e7eb;
-    border-radius: 8px;
     box-shadow: 0 2px 8px rgba(0,0,0,0.08);
     min-width: 150px;
     z-index: 100;
@@ -336,16 +355,43 @@ button:hover img {
     border: 1px, solid #000000;
 }
 .conta-dropdown-menu button {
-
     color: #000000;
     padding: 10px 18px;
     text-align: left;
-    width: 100%;
+    width: 200px;
     font-size: 15px;
     cursor: pointer;
     transition: background 0.2s;
 }
 .conta-dropdown-menu button:hover {
+    color: #079ac7;
+    transition: color 0.2s ease;
+}
+
+.categorias-dropdown-menu {
+    position: absolute;
+    top: 51px;
+    background: #fff;
+    border: 1px solid #e5e7eb;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    min-width: 150px;
+    z-index: 100;
+    display: flex;
+    flex-direction: column;
+    padding: 8px 0;
+    margin-top: 4px;
+    border: 1px, solid #000000;
+}
+.categorias-dropdown-menu button {
+    color: #000000;
+    padding: 10px 18px;
+    text-align: left;
+    width: 200px;
+    font-size: 15px;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+.categorias-dropdown-menu button:hover {
     color: #079ac7;
     transition: color 0.2s ease;
 }

@@ -103,7 +103,6 @@ onMounted(() => {
     min-height: 300px;
     width: 100%;
     max-width: 100vw;
-    margin-top: 190px;
 }
 
 .carousel-wrapper {
@@ -241,7 +240,6 @@ onMounted(() => {
     height: 30vh;
     min-height: 165px;
     width: 100%;
-    margin-top: 210px;
     }
 
     .indicators {

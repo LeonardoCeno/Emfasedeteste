@@ -39,13 +39,9 @@ export async function register(name, email, password) {
   return response.data
 }
 
-// Configurar o axios para usar o token salvo, se existir
 const token = localStorage.getItem('token')
 if (token) {
   api.defaults.headers.common['Authorization'] = `Bearer ${token}`
 }
 
-// Remove configuração de uso do localStorage
-
-// Outras funções para produtos, categorias, etc, podem ser adicionadas aqui futuramente. 
-export default api 
+export default api

@@ -4,7 +4,23 @@
 <div class="titulo" >
 <h3>PRINCIPAIS OBRAS</h3>
 </div>
-
+<div class="soumdetalhe"></div>
+<div class="produtos" >
+    <div v-if="carregando" class="carregando">Carregando produtos...</div>
+    <div v-else-if="erro" class="erro">{{ erro }}</div>
+    <div class="lista" v-else>
+        <div class="produto" v-for="produto in produtosVisiveis" :key="produto.id">
+        <img :src="produto.image_path" alt="Imagem do produto" class="produto-imagem" />
+        <h4 class="produto-nome">{{ produto.name }}</h4>
+        <p class="produto-preco">R$ {{ produto.price }}</p>
+    </div>
+    </div>
+    <button v-if="!mostrarTodos && produtos.length > 8" class="mostrar-mais" @click="mostrarTodos = true">Mostrar mais</button>
+</div>
+<div class="titulo" >
+<h3>PRINCIPAIS OBRAS</h3>
+</div>
+<div class="soumdetalhe"></div>
 <div class="produtos" >
     <div v-if="carregando" class="carregando">Carregando produtos...</div>
     <div v-else-if="erro" class="erro">{{ erro }}</div>
@@ -64,7 +80,7 @@ const produtosVisiveis = computed(() => {
     background-color: #06080a;
     height: 9vh;
     width: 87vw;
-    margin-bottom: 70px;
+    margin-bottom: 30px;
 }
 
 .titulo h3 {
@@ -101,7 +117,7 @@ const produtosVisiveis = computed(() => {
 
 .mostrar-mais {
     display: block;
-    margin: 16px 0 0 0;
+    margin-bottom: 100px;
     padding: 6px 18px;
     background: none;
     color: #111;
@@ -117,6 +133,13 @@ const produtosVisiveis = computed(() => {
 }
 .mostrar-mais:hover {
     background-color: rgb(190, 190, 190);
+}
+
+.soumdetalhe {
+    width: 87vw;
+    margin-bottom: 40px;
+    height: 1px;
+    background-color: #5a5a5a;
 }
 
 </style>
