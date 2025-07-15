@@ -23,7 +23,7 @@
 <div class="comercial" >
     <img src="./img/banner7menor.jpeg" alt="">
 </div>
-<div class="titulo" >
+<div id="cord" class="titulo" >
 <h3>OFERTAS</h3>
 </div>
 <div class="soumdetalhe"></div>
@@ -83,10 +83,14 @@ const produtosVisiveis = computed(() => {
     justify-content: center;
     align-items: center;
     margin-top: 20px;
-    background-color: #06080a;
+    background-color: #111d29;
     height: 9vh;
     width: 87vw;
     margin-bottom: 30px;
+}
+
+#cord {
+    background-color: #3a9c73;
 }
 
 .titulo h3 {

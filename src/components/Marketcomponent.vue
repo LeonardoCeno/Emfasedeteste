@@ -334,7 +334,7 @@ onMounted(() => {
 }
 
 .espaco2 {
-    background-color:  #06080a;
-    min-height: 2.5vh;
+    background-color:  #040d16f5;
+    min-height: 1vh;
 }
 </style>
