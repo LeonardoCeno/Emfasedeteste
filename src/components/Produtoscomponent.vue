@@ -2,7 +2,7 @@
 
 <div class="tudo" >
 <div class="comercial" >
-    <img src="./img/banner9.jpg" alt="">
+    <img src="./img/banner8.jpg" alt="">
 </div>
 <div class="titulo" >
 <h3>PRINCIPAIS OBRAS</h3>
@@ -21,7 +21,7 @@
     <button v-if="!mostrarTodos && produtos.length > 8" class="mostrar-mais" @click="mostrarTodos = true">Mostrar mais</button>
 </div>
 <div class="comercial" >
-    <img src="./img/banner8.jpg" alt="">
+    <img src="./img/banner7menor.jpeg" alt="">
 </div>
 <div class="titulo" >
 <h3>OFERTAS</h3>

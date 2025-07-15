@@ -144,7 +144,7 @@ header {
 .logo img {
     width: auto;
     height: 14vh;
-    filter: brightness(30%);
+    filter: brightness(22%);
     transform: rotate(-9deg);
 }
 
@@ -314,6 +314,7 @@ button:hover img {
     transition: color 0.2s ease;
     color: white;
     height: 55px;
+    font-weight: bold;
 }
 
 .Categorias button:hover {
