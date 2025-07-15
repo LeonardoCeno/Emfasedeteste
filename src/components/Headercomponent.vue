@@ -2,7 +2,7 @@
     <div class="fixador" >
     <header>
         <a class="logo desktop" href="/">
-        <img src="../components/img/LOGOMANYA-Photoroom.png" alt="" />
+        <img src="../components/img/agrsimtabao-Photoroom.png" alt="" />
         </a>
         <div class="input desktop">
             <input type="text" placeholder="Livros, Mangás, novas visões..." />
@@ -143,8 +143,9 @@ header {
 
 .logo img {
     width: auto;
-    height: 12vh;
-    filter: invert(1);
+    height: 14vh;
+    filter: brightness(25%);
+    transform: rotate(-9deg);
 }
 
 .input {
@@ -288,7 +289,6 @@ button:hover img {
     align-items: center;
     min-height: 7.5vh;
     background: #06080af5;
-    color: #ffffff;
     font-size: 14px;
     gap: 70px;
 }

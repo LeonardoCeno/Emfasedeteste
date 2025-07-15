@@ -1,6 +1,9 @@
 <template>
 
 <div class="tudo" >
+<div class="comercial" >
+    <img src="./img/banner9.jpg" alt="">
+</div>
 <div class="titulo" >
 <h3>PRINCIPAIS OBRAS</h3>
 </div>
@@ -17,8 +20,11 @@
     </div>
     <button v-if="!mostrarTodos && produtos.length > 8" class="mostrar-mais" @click="mostrarTodos = true">Mostrar mais</button>
 </div>
+<div class="comercial" >
+    <img src="./img/banner8.jpg" alt="">
+</div>
 <div class="titulo" >
-<h3>PRINCIPAIS OBRAS</h3>
+<h3>OFERTAS</h3>
 </div>
 <div class="soumdetalhe"></div>
 <div class="produtos" >
@@ -117,7 +123,7 @@ const produtosVisiveis = computed(() => {
 
 .mostrar-mais {
     display: block;
-    margin-bottom: 100px;
+    margin-bottom: 90px;
     padding: 6px 18px;
     background: none;
     color: #111;
@@ -141,5 +147,11 @@ const produtosVisiveis = computed(() => {
     height: 1px;
     background-color: #5a5a5a;
 }
+
+.comercial img {
+    width: 87vw;
+    height: auto;
+}
+
 
 </style>
