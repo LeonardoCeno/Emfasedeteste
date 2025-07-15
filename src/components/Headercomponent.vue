@@ -144,7 +144,7 @@ header {
 .logo img {
     width: auto;
     height: 14vh;
-    filter: brightness(25%);
+    filter: brightness(30%);
     transform: rotate(-9deg);
 }
 
@@ -192,6 +192,10 @@ input::placeholder {
     right: 15px;
 }
 
+.botoes p {
+    font-weight: bold;
+}
+
 button {
     display: flex;
     align-items: center;
@@ -200,27 +204,26 @@ button {
     white-space: nowrap;
     background: transparent;
     border: none;
-    border-radius: 15px;
     padding: 6px 12px;
     cursor: pointer;
-    transition: color 0.2s ease;
+    transition: color 0.1s;
     font-weight: 500;
     font-size: 14px;
     height: 55px;
 }
 
-button:hover {
-    color: #63b3ed;
+.botoes button:hover {
+    color: #079ac7;
 }
 
 button img {
     width: auto;
     height: 3vh;
-    transition: filter 0.2s ease;
+    transition: 0.1s;
 }
 
 button:hover img {
-    filter: brightness(0) invert(45%) sepia(65%) saturate(1050%) hue-rotate(160deg) brightness(115%) contrast(100%);
+    filter: invert(45%) sepia(65%) saturate(1000%) hue-rotate(160deg) brightness(105%) contrast(100%);
 }
 
 .mobile {
@@ -254,6 +257,7 @@ button:hover img {
 
     .topo-mobile .logo img {
         height: 7vh;
+        filter: brightness(15%);
     }
 
     .input {
@@ -365,7 +369,7 @@ button:hover img {
 }
 .conta-dropdown-menu button:hover {
     color: #079ac7;
-    transition: color 0.2s ease;
+    transition: color 0.2s;
 }
 
 .categorias-dropdown-menu {
@@ -393,7 +397,7 @@ button:hover img {
 }
 .categorias-dropdown-menu button:hover {
     color: #079ac7;
-    transition: color 0.2s ease;
+    transition: color 0.2s;
 }
 
 </style>
