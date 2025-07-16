@@ -1,6 +1,6 @@
 <template>
+<div class="tudo" >
     <div class="dados-container">
-        <h2>Meus Dados</h2>
         <input type="file" ref="fileInput" accept="image/*" style="display:none" />
         <img :src="usuario.image_path" alt="Foto do usuário" class="foto-usuario" @click="triggerFileInput" title="Clique para alterar a foto" />
         <div v-if="carregando">Carregando dados...</div>
@@ -13,6 +13,7 @@
             </div>
         </div>
     </div>
+</div>
 </template>
 
 <script setup>
@@ -22,7 +23,7 @@ import api from '../services/api'
 const usuario = ref({})
 const carregando = ref(true)
 const erro = ref('')
-const fileInput = ref(null)
+const fileInput = ref('')
 
 onMounted(async () => {
     await carregarUsuario()
@@ -40,20 +41,29 @@ async function carregarUsuario() {
 }
 
 function triggerFileInput() {
-    if (fileInput.value) fileInput.value.click()
+    fileInput.value.click()
 }
 
 </script>
 
 <style scoped>
-.dados-container {
+
+
+.tudo {
     display: flex;
     flex-direction: column;
     align-items: center;
-    max-width: 100%;
+    width: 100%;
     height: 100%;
+}
+
+.dados-container {
+    margin-top: 1vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-width: 40%;
     background: #fff;
-    box-shadow: 0 2px 12px rgba(0,0,0,0.08);
     padding: 32px 24px;
     font-family: 'Inter', Arial, sans-serif;
 }
@@ -64,7 +74,7 @@ h2 {
     font-size: 3vw;
 }
 p {
-    font-size: 1.5rem;
+    font-size: 2vw;
     margin-bottom: 12px;
 }
 .erro {
@@ -77,24 +87,28 @@ p {
     margin-top: 50px;
     display: flex;
     flex-direction: column;
-    width: 42vw;
 }
 
 .foto-usuario {
-    width: 10vw;
-    height: 10vw;
+    width: 20vw;
+    height: 20vw;
+    min-width: 120px;
+    min-height: 120px;
     border-radius: 50%;
     border: 2px solid #000000;
     margin: 18px 0 28px 0;
     box-shadow: 0 2px 8px rgba(0,0,0,0.10);
     cursor: pointer;
     transition: 0.2s;
+    background-position: center;
+    background-repeat: no-repeat;
 }
 
 .foto-usuario:hover {
-    transition: 0.2s;
+    transition: 0.1s;
     background-color: rgb(196, 196, 196);
-    background-image: url('../components/img/pincel.png');
+    background-image: url('../components/img/baixar.png');
+    background-size: 15%;
 }
 
 </style>
