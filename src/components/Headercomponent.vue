@@ -29,7 +29,7 @@
                     <img src="../components/img/usuariofinal.png" alt="" />
                 </button>
                 <div v-if="showDropdown" class="conta-dropdown-menu">
-                    <button @click="goToDados">Dados</button>
+                    <button @click="goToPainel">Dados</button>
                     <button @click="logout">Sair</button>
                 </div>
             </div>
@@ -115,9 +115,9 @@ function logout() {
     window.location.reload()
 }
 
-function goToDados() {
+function goToPainel() {
     showDropdown.value = false
-    router.push('/dados')
+    router.push('/painel')
 }
 </script>
 

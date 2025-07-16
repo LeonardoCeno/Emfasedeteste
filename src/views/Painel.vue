@@ -2,14 +2,14 @@
 <Header></Header>
 <div class="Tudo" >
     <div class="menuesquerdo" >
-        <button>Meus dados</button>
+        <router-link to="/dados"> <button>Meus dados</button></router-link>
         <button>Cupons</button>
         <button>Pedidos</button>
         <button>Favoritos</button>
         <button>Endereços</button>
     </div>
     <div class="menudireito" >
-
+        <router-view></router-view>
     </div>
 
 </div>
