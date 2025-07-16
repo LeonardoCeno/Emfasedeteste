@@ -7,9 +7,33 @@
         <div v-else-if="erro" class="erro">{{ erro }}</div>
         <div v-else>
             <div class="informacoes">
-                <p><strong>Nome:</strong> {{ usuario.name }}</p>
-                <p><strong>Email:</strong> {{ usuario.email }}</p>
-                <p><strong>Senha:</strong> ********</p>
+                <div style="display: flex; align-items: center; margin-bottom: 12px;">
+                    <span v-if="!editandoNome && hoverNome" style="margin-right: 8px; cursor: pointer;">✏️</span>
+                    <template v-if="editandoNome">
+                        <input v-model="novoNome" @blur="salvarNome" @keyup.enter="salvarNome" type="text" style="font-size: 2vw;" autofocus />
+                    </template>
+                    <template v-else>
+                        <p @mouseenter="hoverNome = true" @mouseleave="hoverNome = false" @click="editarNome" style="margin: 0; cursor: pointer;"><strong>Nome:</strong> {{ usuario.name }}</p>
+                    </template>
+                </div>
+                <div style="display: flex; align-items: center; margin-bottom: 12px;">
+                    <span v-if="!editandoEmail && hoverEmail" style="margin-right: 8px; cursor: pointer;">✏️</span>
+                    <template v-if="editandoEmail">
+                        <input v-model="novoEmail" @blur="salvarEmail" @keyup.enter="salvarEmail" type="email" style="font-size: 2vw;" autofocus />
+                    </template>
+                    <template v-else>
+                        <p @mouseenter="hoverEmail = true" @mouseleave="hoverEmail = false" @click="editarEmail" style="margin: 0; cursor: pointer;"><strong>Email:</strong> {{ usuario.email }}</p>
+                    </template>
+                </div>
+                <div style="display: flex; align-items: center; margin-bottom: 12px;">
+                    <span v-if="!editandoSenha && hoverSenha" style="margin-right: 8px; cursor: pointer;">✏️</span>
+                    <template v-if="editandoSenha">
+                        <input v-model="novaSenha" @blur="salvarSenha" @keyup.enter="salvarSenha" type="password" style="font-size: 2vw;" placeholder="Nova senha" autofocus />
+                    </template>
+                    <template v-else>
+                        <p @mouseenter="hoverSenha = true" @mouseleave="hoverSenha = false" @click="editarSenha" style="margin: 0; cursor: pointer;"><strong>Senha:</strong> ********</p>
+                    </template>
+                </div>
             </div>
         </div>
     </div>
@@ -32,6 +56,17 @@ const userImageUrl = computed(() => {
     return BASE_IMAGE_URL + usuario.value.image_path
 })
 
+// Estados de edição e valores temporários
+const editandoNome = ref(false)
+const editandoEmail = ref(false)
+const editandoSenha = ref(false)
+const hoverNome = ref(false)
+const hoverEmail = ref(false)
+const hoverSenha = ref(false)
+const novoNome = ref('')
+const novoEmail = ref('')
+const novaSenha = ref('')
+
 onMounted(async () => {
     await carregarUsuario()
 })
@@ -39,6 +74,9 @@ onMounted(async () => {
 async function carregarUsuario() {
     try {
         usuario.value = await getUsuario()
+        novoNome.value = usuario.value.name
+        novoEmail.value = usuario.value.email
+        novaSenha.value = ''
     } catch (e) {
         erro.value = 'Erro ao carregar dados do usuário.'
     } finally {
@@ -65,6 +103,55 @@ async function onFileChange(event) {
     } catch (e) {
         erro.value = 'Erro ao atualizar imagem de perfil.'
     }
+}
+
+function editarNome() {
+    editandoNome.value = true
+    novoNome.value = usuario.value.name
+}
+async function salvarNome() {
+    if (novoNome.value && novoNome.value !== usuario.value.name) {
+        try {
+            const response = await api.put('/users/me', { name: novoNome.value, email: usuario.value.email })
+            usuario.value = response.data
+        } catch (e) {
+            erro.value = 'Erro ao atualizar nome.'
+        }
+    }
+    editandoNome.value = false
+}
+
+function editarEmail() {
+    editandoEmail.value = true
+    novoEmail.value = usuario.value.email
+}
+async function salvarEmail() {
+    if (novoEmail.value && novoEmail.value !== usuario.value.email) {
+        try {
+            const response = await api.put('/users/me', { name: usuario.value.name, email: novoEmail.value })
+            usuario.value = response.data
+        } catch (e) {
+            erro.value = 'Erro ao atualizar email.'
+        }
+    }
+    editandoEmail.value = false
+}
+
+function editarSenha() {
+    editandoSenha.value = true
+    novaSenha.value = ''
+}
+async function salvarSenha() {
+    if (novaSenha.value) {
+        try {
+            const response = await api.put('/users/me', { name: usuario.value.name, email: usuario.value.email, password: novaSenha.value })
+            usuario.value = response.data
+        } catch (e) {
+            erro.value = 'Erro ao atualizar senha.'
+        }
+    }
+    editandoSenha.value = false
+    novaSenha.value = ''
 }
 
 </script>
