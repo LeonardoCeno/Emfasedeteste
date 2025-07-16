@@ -1,7 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/Market.vue'
 import LoginView from '../views/Login.vue'
-import DadosView from '../views/Dados.vue'
+import DadosView from '../views/Painel.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),

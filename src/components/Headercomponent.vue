@@ -148,6 +148,11 @@ header {
     transform: rotate(-9deg);
 }
 
+.logo img:hover{
+    transition: 0.5s ease-in-out;
+    filter: brightness(55%);
+}
+
 .input {
     display: flex;
     align-items: center;
@@ -398,7 +403,7 @@ button:hover img {
 }
 .categorias-dropdown-menu button:hover {
     color: #079ac7;
-    transition: color 0.2s;
+    transition: 0.1s;
 }
 
 </style>
