@@ -66,6 +66,8 @@ onMounted(async () => {
 const produtosVisiveis = computed(() => {
     return mostrarTodos.value ? produtos.value : produtos.value.slice(0, 8)
 })
+
+
 </script>
 
 
@@ -123,7 +125,6 @@ const produtosVisiveis = computed(() => {
     padding: 4px;
     gap: 30px;
     position: relative;
-    background-color: white;
 }
 
 .mostrar-mais {
@@ -158,5 +159,16 @@ const produtosVisiveis = computed(() => {
     height: auto;
 }
 
+@media (max-width: 768px) {
+    .lista {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media (max-width: 568px) {
+    .lista {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
 
 </style>
