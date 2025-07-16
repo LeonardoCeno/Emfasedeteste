@@ -117,7 +117,7 @@ function logout() {
 
 function goToPainel() {
     showDropdown.value = false
-    router.push('/painel')
+    router.push('/dados')
 }
 </script>
 
@@ -149,7 +149,7 @@ header {
 }
 
 .logo img:hover{
-    transition: 0.5s ease-in-out;
+    transition: 0.4s ease-in-out;
     filter: brightness(55%);
 }
 

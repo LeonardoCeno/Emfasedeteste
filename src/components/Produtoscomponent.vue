@@ -123,6 +123,7 @@ const produtosVisiveis = computed(() => {
     padding: 4px;
     gap: 30px;
     position: relative;
+    background-color: white;
 }
 
 .mostrar-mais {

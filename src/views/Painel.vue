@@ -3,10 +3,11 @@
 <div class="Tudo" >
     <div class="menuesquerdo" >
         <router-link to="/dados"> <button>Meus dados</button></router-link>
-        <button>Cupons</button>
-        <button>Pedidos</button>
-        <button>Favoritos</button>
-        <button>Endereços</button>
+        <router-link to="/cupons"> <button>Cupons</button></router-link>
+        <router-link to="/carrinho"> <button>Carrinho</button></router-link>
+        <router-link to="/pedidos"> <button>Pedidos</button></router-link>
+        <router-link to="/favoritos"> <button>Favortios</button></router-link>
+        <router-link to="/enderecos"> <button>Endereços</button></router-link>
     </div>
     <div class="menudireito" >
         <router-view></router-view>
@@ -35,7 +36,6 @@ import Footer from '../components/Footercomponent.vue'
     width: 17%;
     height: 100%;
     background-color: #040d16;
-    padding-top: 17px;
     border: px solid white;
     min-width: 120px;
 }
@@ -46,12 +46,12 @@ import Footer from '../components/Footercomponent.vue'
     background-color: #040d16;
     color: #ffffff;
     font-weight: bold;
-    font-size: 16px;
+    font-size: 14px;
 }
 
 .menuesquerdo button:hover{
     transition: 0.1s;
-    background-color: #4879ff;
+    background-color: #dbdbdb;
     color: #000000;
 }
 
@@ -60,6 +60,5 @@ import Footer from '../components/Footercomponent.vue'
     height: 100vh;
     background-color: #ffffff;
 }
-
 
 </style>

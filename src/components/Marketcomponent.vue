@@ -70,7 +70,7 @@ import banner2 from './img/janemsei-Photoroom.png'
 import banner3 from './img/LIVRO.png'
 
 const banners = [banner1, banner2, banner3]
-const bannerLinks = ['/pagina1', '/pagina2', '/pagina3'] // Links para cada banner
+const bannerLinks = ['', '', ''] // Links para cada banner que vou por ainda
 const indexAtual = ref(0)
 
 const avancar = () => {
@@ -187,7 +187,6 @@ onMounted(() => {
     display: flex;
     justify-content: space-evenly;
     align-items: stretch;
-    background-color: #f3f3f3;
     padding: 30px 16px;
     flex-wrap: wrap;
     margin-top: 20px;
