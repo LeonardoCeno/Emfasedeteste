@@ -86,4 +86,17 @@ const router = createRouter({
   ],
 })
 
+router.beforeEach((to, from, next) => {
+  const painelRoutes = [
+    'Painel', 'Dados', 'Cupons', 'Pedidos', 'Favoritos', 'Enderecos', 'Carrinho',
+    'ADMcategorias', 'ADMprodutos', 'ADMpedidos', 'ADMcupons'
+  ]
+  const token = localStorage.getItem('token')
+  if (painelRoutes.includes(to.name) && !token) {
+    next({ name: 'Login' })
+  } else {
+    next()
+  }
+})
+
 export default router
