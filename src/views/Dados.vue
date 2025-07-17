@@ -1,5 +1,8 @@
 <template>
 <div class="tudo" >
+    <div class="wallpaper" @click="triggerInputFile" :style="wallpaperStyle">
+        <input type="file" ref="Inputfile" style="display: none;"  accept="image/*" @change="onWallpaperChange" />
+    </div>
     <div class="dados-container">
         <input type="file" ref="fileInput" accept="image/*" style="display:none" @change="onFileChange" />
         <img :src="userImageUrl" alt="" class="foto-usuario" @click="triggerFileInput" title="Clique para alterar a foto" />
@@ -8,30 +11,36 @@
         <div v-else>
             <div class="informacoes">
                 <div style="display: flex; align-items: center; margin-bottom: 12px;">
-                    <span v-if="!editandoNome && hoverNome" style="margin-right: 8px; cursor: pointer;">✏️</span>
+                    <img src="/src/components/img/editando.png" alt="editar" style="width: 25px; height: 25px; margin-right: 8px; cursor: pointer;" @click="editarNome" />
                     <template v-if="editandoNome">
-                        <input v-model="novoNome" @blur="salvarNome" @keyup.enter="salvarNome" type="text" style="font-size: 2vw;" autofocus />
+                        <input v-model="novoNome" ref="nomeInputRef" @blur="salvarNome" @keyup.enter="salvarNome" type="text" style="font-size: 2vw;" autofocus />
                     </template>
                     <template v-else>
-                        <p @mouseenter="hoverNome = true" @mouseleave="hoverNome = false" @click="editarNome" style="margin: 0; cursor: pointer;"><strong>Nome:</strong> {{ usuario.name }}</p>
+                        <p style="margin: 0; user-select: none; transition: color 0.2s; color: inherit; text-decoration: none;">
+                            <strong>Nome:</strong> {{ usuario.name }}
+                        </p>
                     </template>
                 </div>
                 <div style="display: flex; align-items: center; margin-bottom: 12px;">
-                    <span v-if="!editandoEmail && hoverEmail" style="margin-right: 8px; cursor: pointer;">✏️</span>
+                    <img src="/src/components/img/editando.png" alt="editar" style="width: 25px; height: 25px; margin-right: 8px; cursor: pointer;" @click="editarEmail" />
                     <template v-if="editandoEmail">
-                        <input v-model="novoEmail" @blur="salvarEmail" @keyup.enter="salvarEmail" type="email" style="font-size: 2vw;" autofocus />
+                        <input v-model="novoEmail" ref="emailInputRef" @blur="salvarEmail" @keyup.enter="salvarEmail" type="email" style="font-size: 2vw;" autofocus />
                     </template>
                     <template v-else>
-                        <p @mouseenter="hoverEmail = true" @mouseleave="hoverEmail = false" @click="editarEmail" style="margin: 0; cursor: pointer;"><strong>Email:</strong> {{ usuario.email }}</p>
+                        <p style="margin: 0; user-select: none; transition: color 0.2s; color: inherit; text-decoration: none;">
+                            <strong>Email:</strong> {{ usuario.email }}
+                        </p>
                     </template>
                 </div>
                 <div style="display: flex; align-items: center; margin-bottom: 12px;">
-                    <span v-if="!editandoSenha && hoverSenha" style="margin-right: 8px; cursor: pointer;">✏️</span>
+                    <img src="/src/components/img/editando.png" alt="editar" style="width: 25px; height: 25px; margin-right: 8px; cursor: pointer;" @click="editarSenha" />
                     <template v-if="editandoSenha">
-                        <input v-model="novaSenha" @blur="salvarSenha" @keyup.enter="salvarSenha" type="password" style="font-size: 2vw;" placeholder="Nova senha" autofocus />
+                        <input v-model="novaSenha" ref="senhaInputRef" @blur="salvarSenha" @keyup.enter="salvarSenha" type="password" style="font-size: 2vw;" placeholder="Nova senha" autofocus />
                     </template>
                     <template v-else>
-                        <p @mouseenter="hoverSenha = true" @mouseleave="hoverSenha = false" @click="editarSenha" style="margin: 0; cursor: pointer;"><strong>Senha:</strong> ********</p>
+                        <p style="margin: 0; user-select: none; transition: color 0.2s; color: inherit; text-decoration: none;">
+                            <strong>Senha:</strong> ********
+                        </p>
                     </template>
                 </div>
             </div>
@@ -41,22 +50,23 @@
 </template>
 
 <script setup>
-import { ref, onMounted, computed } from 'vue'
+import { ref, onMounted, computed, onBeforeUnmount } from 'vue'
 import api, { getUsuario } from '../services/api'
 
 const usuario = ref({})
 const carregando = ref(true)
 const erro = ref('')
 const fileInput = ref(null)
+const Inputfile = ref(null)
+const wallpaperStyle = ref({})
 
-const BASE_IMAGE_URL = 'http://35.196.79.227:8000' // ajuste se necessário
+const BASE_IMAGE_URL = 'http://35.196.79.227:8000'
 
 const userImageUrl = computed(() => {
     if (!usuario.value.image_path) return '/placeholder-image.jpg'
     return BASE_IMAGE_URL + usuario.value.image_path
 })
 
-// Estados de edição e valores temporários
 const editandoNome = ref(false)
 const editandoEmail = ref(false)
 const editandoSenha = ref(false)
@@ -67,8 +77,43 @@ const novoNome = ref('')
 const novoEmail = ref('')
 const novaSenha = ref('')
 
+// Função utilitária para detectar clique fora
+function useClickOutside(targetRef, callback) {
+    function handler(event) {
+        if (targetRef.value && !targetRef.value.contains(event.target)) {
+            callback()
+        }
+    }
+    onMounted(() => {
+        document.addEventListener('mousedown', handler)
+    })
+    onBeforeUnmount(() => {
+        document.removeEventListener('mousedown', handler)
+    })
+}
+
+// Refs para os inputs de edição
+const nomeInputRef = ref(null)
+const emailInputRef = ref(null)
+const senhaInputRef = ref(null)
+
+// Fecha edição ao clicar fora
+useClickOutside(nomeInputRef, () => { if (editandoNome.value) salvarNome() })
+useClickOutside(emailInputRef, () => { if (editandoEmail.value) salvarEmail() })
+useClickOutside(senhaInputRef, () => { if (editandoSenha.value) salvarSenha() })
+
+// Carregar imagem de fundo do localStorage ao iniciar
 onMounted(async () => {
     await carregarUsuario()
+    const savedWallpaper = localStorage.getItem('wallpaperBg')
+    if (savedWallpaper) {
+        wallpaperStyle.value = {
+            backgroundImage: `url('${savedWallpaper}')`,
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            backgroundRepeat: 'no-repeat'
+        }
+    }
 })
 
 async function carregarUsuario() {
@@ -88,6 +133,10 @@ function triggerFileInput() {
     if (fileInput.value) fileInput.value.click()
 }
 
+function triggerInputFile() {
+    if (Inputfile.value) Inputfile.value.click()
+}
+
 async function onFileChange(event) {
     const file = event.target.files[0]
     if (!file) return
@@ -103,6 +152,22 @@ async function onFileChange(event) {
     } catch (e) {
         erro.value = 'Erro ao atualizar imagem de perfil.'
     }
+}
+
+function onWallpaperChange(event) {
+    const file = event.target.files[0]
+    if (!file) return
+    const reader = new FileReader()
+    reader.onload = (e) => {
+        const dataUrl = e.target.result
+        wallpaperStyle.value = {
+            backgroundImage: `url('${dataUrl}')`,
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            backgroundRepeat: 'no-repeat'
+        }
+    }
+    reader.readAsDataURL(file)
 }
 
 function editarNome() {
@@ -158,7 +223,6 @@ async function salvarSenha() {
 
 <style scoped>
 
-
 .tudo {
     display: flex;
     flex-direction: column;
@@ -211,6 +275,7 @@ p {
     transition: 0.2s;
     background-position: center;
     background-repeat: no-repeat;
+    z-index: 2;
 }
 
 .foto-usuario:hover {
@@ -219,6 +284,40 @@ p {
     background-image: url('../components/img/baixar.png');
     background-size: 15%;
     opacity: 0.9;
+}
+
+.wallpaper {
+    background-color: rgb(255, 255, 255);
+    width: 80vw;
+    height: 355px;
+    position: absolute;
+    z-index: 1;
+    margin-top: 15px;
+}
+
+.wallpaper:hover {
+    opacity: 0.9;
+}
+
+.wallpaper img {
+    width: 80vw;
+    height: 355px;
+}
+
+@media (max-width: 1000px) {
+    p {
+    font-size: 4vw;
+    margin-bottom: 12px;
+}
+    .wallpaper {
+        height: 275px;
+    }
+}
+
+@media (max-width: 580px) {
+    .wallpaper {
+        height: 205px;
+    }
 }
 
 </style>

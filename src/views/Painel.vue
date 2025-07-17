@@ -38,6 +38,7 @@ import Footer from '../components/Footercomponent.vue'
     background-color: #040d16;
     border: px solid white;
     min-width: 120px;
+    z-index: 10;
 }
 
 .menuesquerdo button{
