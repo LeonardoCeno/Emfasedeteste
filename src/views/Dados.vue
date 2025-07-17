@@ -29,7 +29,7 @@
                     </template>
                 </div>
                 <div class="info-item">
-                    <img src="/src/components/img/editando.png" alt="editar" class="edit-icon" @click="editarSenha" />
+                    <img src="/src/components/img/editando.png" alt="editar" style="opacity: 0;" class="edit-icon" @click="editarSenha" />
                     <template v-if="editandoSenha">
                         <input v-model="novaSenha" ref="senhaInputRef" @blur="salvarSenha" @keyup.enter="salvarSenha" type="password" class="info-input" placeholder="Nova senha" autofocus />
                     </template>
@@ -183,6 +183,7 @@ function onWallpaperChange(event) {
             backgroundPosition: 'center',
             backgroundRepeat: 'no-repeat'
         }
+        localStorage.setItem('wallpaperBg', dataUrl)
     }
     reader.readAsDataURL(file)
 }
@@ -292,7 +293,7 @@ p {
     min-width: 120px;
     min-height: 120px;
     border-radius: 50%;
-    border: 2px solid #000000;
+    border: 4px solid #000000;
     margin: 18px 0 28px 0;
     cursor: pointer;
     transition: 0.2s;
@@ -307,6 +308,7 @@ p {
     background-image: url('../components/img/baixar.png');
     background-size: 15%;
     opacity: 0.9;
+    filter: brightness(80%);
 }
 
 .wallpaper {
@@ -319,7 +321,8 @@ p {
 }
 
 .wallpaper:hover {
-    opacity: 0.9;
+    opacity: 0.8;
+    filter: brightness(70%);
 }
 
 .wallpaper img {

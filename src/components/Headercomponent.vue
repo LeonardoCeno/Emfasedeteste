@@ -169,7 +169,7 @@ header {
 .input img {
     width: auto;
     height: 4vh;
-    filter: brightness(40%);
+    filter: brightness(20%);
 }
 
 input {
