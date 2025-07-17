@@ -69,7 +69,6 @@ const novoNome = ref('')
 const novoEmail = ref('')
 const novaSenha = ref('')
 
-// Função utilitária para detectar clique fora
 function useClickOutside(targetRef, callback) {
     function handler(event) {
         if (targetRef.value && !targetRef.value.contains(event.target)) {
@@ -191,32 +190,11 @@ function onWallpaperChange(event) {
 function editarNome() {
     editandoNome.value = true
 }
-async function salvarNome() {
-    if (novoNome.value && novoNome.value !== usuario.value.name) {
-        try {
-            const response = await api.put('/users/me', { name: novoNome.value, email: usuario.value.email })
-            usuario.value = response.data
-        } catch (e) {
-            erro.value = 'Erro ao atualizar nome.'
-        }
-    }
-    editandoNome.value = false
-}
 
 function editarEmail() {
     editandoEmail.value = true
 }
-async function salvarEmail() {
-    if (novoEmail.value && novoEmail.value !== usuario.value.email) {
-        try {
-            const response = await api.put('/users/me', { name: usuario.value.name, email: novoEmail.value })
-            usuario.value = response.data
-        } catch (e) {
-            erro.value = 'Erro ao atualizar email.'
-        }
-    }
-    editandoEmail.value = false
-}
+
 
 function editarSenha() {
     editandoSenha.value = true

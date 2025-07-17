@@ -17,7 +17,6 @@ export async function getProdutos() {
   return produtos
 }
 
-// Função para login
 export async function login(email, password) {
   const response = await api.post('/login', { email, password })
   const token = response.data.token
