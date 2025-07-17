@@ -10,37 +10,31 @@
         <div v-else-if="erro" class="erro">{{ erro }}</div>
         <div v-else>
             <div class="informacoes">
-                <div style="display: flex; align-items: center; margin-bottom: 12px;">
-                    <img src="/src/components/img/editando.png" alt="editar" style="width: 25px; height: 25px; margin-right: 8px; cursor: pointer;" @click="editarNome" />
+                <div class="info-item">
+                    <img src="/src/components/img/editando.png" alt="editar" class="edit-icon" @click="editarNome" />
                     <template v-if="editandoNome">
-                        <input v-model="novoNome" ref="nomeInputRef" @blur="salvarNome" @keyup.enter="salvarNome" type="text" style="font-size: 2vw;" autofocus />
+                        <input v-model="novoNome" ref="nomeInputRef" @blur="salvarNome" @keyup.enter="salvarNome" type="text" class="info-input" autofocus />
                     </template>
                     <template v-else>
-                        <p style="margin: 0; user-select: none; transition: color 0.2s; color: inherit; text-decoration: none;">
-                            <strong>Nome:</strong> {{ usuario.name }}
-                        </p>
+                        <p class="info-label"><strong>Nome:</strong> {{ usuario.name }}</p>
                     </template>
                 </div>
-                <div style="display: flex; align-items: center; margin-bottom: 12px;">
-                    <img src="/src/components/img/editando.png" alt="editar" style="width: 25px; height: 25px; margin-right: 8px; cursor: pointer;" @click="editarEmail" />
+                <div class="info-item">
+                    <img src="/src/components/img/editando.png" alt="editar" class="edit-icon" @click="editarEmail" />
                     <template v-if="editandoEmail">
-                        <input v-model="novoEmail" ref="emailInputRef" @blur="salvarEmail" @keyup.enter="salvarEmail" type="email" style="font-size: 2vw;" autofocus />
+                        <input v-model="novoEmail" ref="emailInputRef" @blur="salvarEmail" @keyup.enter="salvarEmail" type="email" class="info-input" autofocus />
                     </template>
                     <template v-else>
-                        <p style="margin: 0; user-select: none; transition: color 0.2s; color: inherit; text-decoration: none;">
-                            <strong>Email:</strong> {{ usuario.email }}
-                        </p>
+                        <p class="info-label"><strong>Email:</strong> {{ usuario.email }}</p>
                     </template>
                 </div>
-                <div style="display: flex; align-items: center; margin-bottom: 12px;">
-                    <img src="/src/components/img/editando.png" alt="editar" style="width: 25px; height: 25px; margin-right: 8px; cursor: pointer;" @click="editarSenha" />
+                <div class="info-item">
+                    <img src="/src/components/img/editando.png" alt="editar" class="edit-icon" @click="editarSenha" />
                     <template v-if="editandoSenha">
-                        <input v-model="novaSenha" ref="senhaInputRef" @blur="salvarSenha" @keyup.enter="salvarSenha" type="password" style="font-size: 2vw;" placeholder="Nova senha" autofocus />
+                        <input v-model="novaSenha" ref="senhaInputRef" @blur="salvarSenha" @keyup.enter="salvarSenha" type="password" class="info-input" placeholder="Nova senha" autofocus />
                     </template>
                     <template v-else>
-                        <p style="margin: 0; user-select: none; transition: color 0.2s; color: inherit; text-decoration: none;">
-                            <strong>Senha:</strong> ********
-                        </p>
+                        <p class="info-label"><strong>Senha:</strong> ********</p>
                     </template>
                 </div>
             </div>
@@ -70,9 +64,6 @@ const userImageUrl = computed(() => {
 const editandoNome = ref(false)
 const editandoEmail = ref(false)
 const editandoSenha = ref(false)
-const hoverNome = ref(false)
-const hoverEmail = ref(false)
-const hoverSenha = ref(false)
 const novoNome = ref('')
 const novoEmail = ref('')
 const novaSenha = ref('')
@@ -100,9 +91,8 @@ const senhaInputRef = ref(null)
 // Fecha edição ao clicar fora
 useClickOutside(nomeInputRef, () => { if (editandoNome.value) salvarNome() })
 useClickOutside(emailInputRef, () => { if (editandoEmail.value) salvarEmail() })
-useClickOutside(senhaInputRef, () => { if (editandoSenha.value) salvarSenha() })
+useClickOutside(senhaInputRef, () => { if (editandoSenha.value) editandoSenha.value = false })
 
-// Carregar imagem de fundo do localStorage ao iniciar
 onMounted(async () => {
     await carregarUsuario()
     const savedWallpaper = localStorage.getItem('wallpaperBg')
@@ -206,18 +196,6 @@ function editarSenha() {
     editandoSenha.value = true
     novaSenha.value = ''
 }
-async function salvarSenha() {
-    if (novaSenha.value) {
-        try {
-            const response = await api.put('/users/me', { name: usuario.value.name, email: usuario.value.email, password: novaSenha.value })
-            usuario.value = response.data
-        } catch (e) {
-            erro.value = 'Erro ao atualizar senha.'
-        }
-    }
-    editandoSenha.value = false
-    novaSenha.value = ''
-}
 
 </script>
 
@@ -258,7 +236,7 @@ p {
 }
 
 .informacoes {
-    margin-top: 50px;
+    margin-top: 70px;
     display: flex;
     flex-direction: column;
 }
@@ -304,19 +282,63 @@ p {
     height: 355px;
 }
 
+.info-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 12px;
+    flex-wrap: nowrap;
+    gap: 8px;
+}
+.info-label {
+    margin: 0;
+    user-select: none;
+    transition: color 0.2s;
+    color: inherit;
+    text-decoration: none;
+    font-size: 2vw;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.edit-icon {
+    width: 25px;
+    height: 25px;
+    margin-right: 8px;
+    cursor: pointer;
+    flex-shrink: 0;
+}
+.info-input {
+    font-size: 2vw;
+    min-width: 0;
+    flex: 1 1 0%;
+}
+
 @media (max-width: 1000px) {
+    .info-label, .info-input {
+        font-size: 4vw;
+    }
     p {
-    font-size: 4vw;
+    font-size: 3vw;
     margin-bottom: 12px;
 }
     .wallpaper {
         height: 275px;
     }
+    .informacoes {
+        margin-top: 100px;
+    }
 }
 
 @media (max-width: 580px) {
+    .info-label, .info-input {
+        font-size: 3.5vw;
+    }
     .wallpaper {
+        width: 73vw;
         height: 205px;
+    }
+    .informacoes {
+        margin-top: 50px;
     }
 }
 
