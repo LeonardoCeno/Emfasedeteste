@@ -8,6 +8,10 @@ import PedidosView from '../views/Pedidos.vue'
 import FavoritosView from '../views/Favoritos.vue'
 import EnderecosView from '../views/Enderecos.vue'
 import CarrinhoView from '../views/Carrinho.vue'
+import ADMcategoriasView from '../views/ADMcategorias.vue'
+import ADMprodutosView from '../views/ADMprodutos.vue'
+import ADMpedidosView from '../views/ADMpedidos.vue'
+import ADMcuponsView from '../views/ADMcupons.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -56,6 +60,26 @@ const router = createRouter({
           path: '/carrinho',
           name: 'Carrinho',
           component: CarrinhoView,
+        },
+        {
+          path: '/ADMcategorias',
+          name: 'ADMcategorias',
+          component: ADMcategoriasView,
+        },
+        {
+          path: '/ADMprodutos',
+          name: 'ADMprodutos',
+          component: ADMprodutosView,
+        },
+        {
+          path: '/ADMpedidos',
+          name: 'ADMpedidos',
+          component: ADMpedidosView,
+        },
+        {
+          path: '/ADMcupons',
+          name: 'ADMcupons',
+          component: ADMcuponsView,
         },
       ]
     }
