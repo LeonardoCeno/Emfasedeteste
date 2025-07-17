@@ -9,11 +9,11 @@
         <div v-if="carregando">Carregando dados...</div>
         <div v-else-if="erro" class="erro">{{ erro }}</div>
         <div v-else>
-            <div class="informacoes">
+            <div class="informacoes" ref="informacoesRef">
                 <div class="info-item">
                     <img src="/src/components/img/editando.png" alt="editar" class="edit-icon" @click="editarNome" />
                     <template v-if="editandoNome">
-                        <input v-model="novoNome" ref="nomeInputRef" @blur="salvarNome" @keyup.enter="salvarNome" type="text" class="info-input" autofocus />
+                        <input v-model="novoNome" ref="nomeInputRef" type="text" class="info-input" autofocus />
                     </template>
                     <template v-else>
                         <p class="info-label"><strong>Nome:</strong> {{ usuario.name }}</p>
@@ -22,7 +22,7 @@
                 <div class="info-item">
                     <img src="/src/components/img/editando.png" alt="editar" class="edit-icon" @click="editarEmail" />
                     <template v-if="editandoEmail">
-                        <input v-model="novoEmail" ref="emailInputRef" @blur="salvarEmail" @keyup.enter="salvarEmail" type="email" class="info-input" autofocus />
+                        <input v-model="novoEmail" ref="emailInputRef" type="email" class="info-input" autofocus />
                     </template>
                     <template v-else>
                         <p class="info-label"><strong>Email:</strong> {{ usuario.email }}</p>
@@ -37,6 +37,7 @@
                         <p class="info-label"><strong>Senha:</strong> ********</p>
                     </template>
                 </div>
+                <button v-if="editandoNome || editandoEmail" class="confirmar-btn" @click="confirmarEdicao">Confirmar alterações</button>
             </div>
         </div>
     </div>
@@ -44,7 +45,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, computed, onBeforeUnmount } from 'vue'
+import { ref, onMounted, computed, onBeforeUnmount, nextTick } from 'vue'
 import api, { getUsuario } from '../services/api'
 
 const usuario = ref({})
@@ -83,15 +84,41 @@ function useClickOutside(targetRef, callback) {
     })
 }
 
-// Refs para os inputs de edição
 const nomeInputRef = ref(null)
 const emailInputRef = ref(null)
 const senhaInputRef = ref(null)
 
-// Fecha edição ao clicar fora
-useClickOutside(nomeInputRef, () => { if (editandoNome.value) salvarNome() })
-useClickOutside(emailInputRef, () => { if (editandoEmail.value) salvarEmail() })
+
 useClickOutside(senhaInputRef, () => { if (editandoSenha.value) editandoSenha.value = false })
+
+const informacoesRef = ref(null)
+
+function cancelarEdicao() {
+    if (editandoNome.value) {
+        novoNome.value = usuario.value.name
+        editandoNome.value = false
+    }
+    if (editandoEmail.value) {
+        novoEmail.value = usuario.value.email
+        editandoEmail.value = false
+    }
+}
+
+function useClickOutsideDiv(targetRef, callback) {
+    function handler(event) {
+        if (targetRef.value && !targetRef.value.contains(event.target)) {
+            callback()
+        }
+    }
+    onMounted(() => {
+        document.addEventListener('mousedown', handler)
+    })
+    onBeforeUnmount(() => {
+        document.removeEventListener('mousedown', handler)
+    })
+}
+
+useClickOutsideDiv(informacoesRef, cancelarEdicao)
 
 onMounted(async () => {
     await carregarUsuario()
@@ -162,7 +189,6 @@ function onWallpaperChange(event) {
 
 function editarNome() {
     editandoNome.value = true
-    novoNome.value = usuario.value.name
 }
 async function salvarNome() {
     if (novoNome.value && novoNome.value !== usuario.value.name) {
@@ -178,7 +204,6 @@ async function salvarNome() {
 
 function editarEmail() {
     editandoEmail.value = true
-    novoEmail.value = usuario.value.email
 }
 async function salvarEmail() {
     if (novoEmail.value && novoEmail.value !== usuario.value.email) {
@@ -195,6 +220,26 @@ async function salvarEmail() {
 function editarSenha() {
     editandoSenha.value = true
     novaSenha.value = ''
+}
+
+async function confirmarEdicao() {
+    let alterou = false
+    try {
+        if (editandoNome.value && novoNome.value && novoNome.value !== usuario.value.name) {
+            alterou = true
+        }
+        if (editandoEmail.value && novoEmail.value && novoEmail.value !== usuario.value.email) {
+            alterou = true
+        }
+        if (alterou) {
+            const response = await api.put('/users/me', { name: novoNome.value, email: novoEmail.value })
+            usuario.value = response.data
+        }
+        editandoNome.value = false
+        editandoEmail.value = false
+    } catch (e) {
+        erro.value = 'Erro ao atualizar dados.'
+    }
 }
 
 </script>
@@ -311,6 +356,21 @@ p {
     font-size: 2vw;
     min-width: 0;
     flex: 1 1 0%;
+}
+
+.confirmar-btn {
+    margin-top: 18px;
+    padding: 8px 24px;
+    background: #06080afa;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+.confirmar-btn:hover {
+    background: #252525;
 }
 
 @media (max-width: 1000px) {

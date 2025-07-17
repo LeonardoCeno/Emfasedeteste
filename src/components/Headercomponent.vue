@@ -297,7 +297,7 @@ button:hover img {
     justify-content: center;
     align-items: center;
     min-height: 7.5vh;
-    background: #040d16f5;
+    background: #02060af5;
     font-size: 14px;
     gap: 70px;
 }

@@ -29,13 +29,12 @@ import Footer from '../components/Footercomponent.vue'
     display: flex;
     width: 100%;
     height: 100vh;
-    background-color: #ff0000;
 }
 
 .menuesquerdo{
     width: 17%;
     height: 100%;
-    background-color: #040d16;
+    background-color: #06080afa;
     border: px solid white;
     min-width: 120px;
     z-index: 10;
@@ -44,7 +43,6 @@ import Footer from '../components/Footercomponent.vue'
 .menuesquerdo button{
     width: 100%;
     height: 70px;
-    background-color: #040d16;
     color: #ffffff;
     font-weight: bold;
     font-size: 14px;
