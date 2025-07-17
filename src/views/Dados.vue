@@ -375,7 +375,7 @@ p {
         font-size: 3.5vw;
     }
     .wallpaper {
-        width: 73vw;
+        width: 70vw;
         height: 205px;
     }
     .informacoes {

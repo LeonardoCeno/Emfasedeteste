@@ -95,10 +95,11 @@ onMounted(() => {
 .banner {
     display: flex;
     align-items: center;
+    justify-content: center;
     flex-direction: column;
     position: relative;
     overflow: hidden;
-    background-color: rgba(5, 0, 46, 0.103);
+    background-color: rgba(180, 180, 180, 0.658);
     height: 44vh;
     min-height: 300px;
     width: 100%;
@@ -159,8 +160,6 @@ onMounted(() => {
     gap: 12px;
     z-index: 10;
     align-items: center;
-    position: relative;
-    right: 3px;
 }
 
 .indicator {
@@ -333,7 +332,7 @@ onMounted(() => {
 }
 
 .espaco2 {
-    background-color:  #040d16f5;
-    min-height: 1vh;
+    background-color:  #02060af5;
+    min-height: 0.5vh;
 }
 </style>

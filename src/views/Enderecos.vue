@@ -1,6 +1,8 @@
 <template>
     <div class="tudo">
-        <h1>Endereços</h1>
+        <div class="titulo" >
+            <h1>Endereços</h1>
+        </div>
     </div>
 
 
@@ -17,6 +19,16 @@
     width: 100%;
     height: 100%;
     background-color: #ffffff;
+}
+
+.titulo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #ffffff;
+    height: 17vh;
+    width: 100%;
+    font-size: 1.5rem;
 }
 
 </style>

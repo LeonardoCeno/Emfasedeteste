@@ -127,7 +127,7 @@ header {
     display: flex;
     align-items: center;
     justify-content: center;
-    background: #ffffffd7;
+    background: #ffffffcb;
     min-height: 12vh;
     gap: 6vw;
     flex-wrap: wrap;
@@ -144,20 +144,20 @@ header {
 .logo img {
     width: auto;
     height: 14vh;
-    filter: brightness(22%);
+    filter: brightness(20%);
     transform: rotate(-9deg);
 }
 
 .logo img:hover{
     transition: 0.4s ease-in-out;
-    filter: brightness(55%);
+    filter: brightness(65%);
 }
 
 .input {
     display: flex;
     align-items: center;
     background-color: #ffffff;
-    border-radius: 30px;
+    border-radius: 15px;
     padding: 0 20px;
     width: 36vw;
     height: 45px;
