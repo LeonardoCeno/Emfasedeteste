@@ -78,7 +78,7 @@
             </button>
             <div v-if="showCategoriasDropdown" class="categorias-dropdown-menu">
                 <button @click="() => {}">Ação</button>
-                <button @click="() => {}">Ficção</button>
+                <button @click="() => {}">Comédia</button>
                 <button @click="() => {}">Romance</button>
                 <button @click="() => {}">Livros</button>
                 <button @click="() => {}">Mangás</button>

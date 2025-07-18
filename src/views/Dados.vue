@@ -271,7 +271,7 @@ p {
     min-width: 120px;
     min-height: 120px;
     border-radius: 50%;
-    border: 4px solid #000000;
+    border: 1.5px solid #000000;
     margin: 18px 0 28px 0;
     cursor: pointer;
     transition: 0.2s;

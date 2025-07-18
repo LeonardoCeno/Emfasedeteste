@@ -59,7 +59,6 @@ const categorias = ref([])
 const carregandoCategorias = ref(true)
 const erroCategorias = ref('')
 
-// Edição
 const editando = ref(false)
 const editId = ref(null)
 const editNome = ref('')
@@ -69,7 +68,6 @@ const mensagemEdicao = ref('')
 
 const mostraFormulario = ref(false)
 
-// Campos do formulário (usados para ambos os casos)
 const nomeForm = ref('')
 const descricaoForm = ref('')
 const imagemForm = ref(null)
@@ -124,7 +122,6 @@ async function carregarCategorias() {
     carregandoCategorias.value = true
     erroCategorias.value = ''
     try {
-        // Buscar apenas as categorias do admin 228
         const { data } = await api.get('/categories/user/228')
         categorias.value = data.map(cat => ({
             ...cat,
@@ -326,6 +323,7 @@ function abrirCriacao() {
     list-style: none;
     padding: 0;
     margin: 0;
+    margin-bottom: 70px;
 }
 
 .categorias li {
@@ -341,7 +339,13 @@ function abrirCriacao() {
 }
 
 .categorias li img {
+    width: 50px;
+    height: 50px;
+    object-fit: cover;
+    aspect-ratio: 1/1;
     border-radius: 50%;
+    background: #fff;
+    border: 1px solid #ccc;
 }
 
 .categorias li button {
