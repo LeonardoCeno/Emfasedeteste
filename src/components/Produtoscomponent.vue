@@ -45,7 +45,7 @@
 
 <script setup>
 import { ref, onMounted, computed } from 'vue'
-import { getProdutos } from '../services/api'
+import api from '../services/api'
 
 const produtos = ref([])
 const carregando = ref(true)
@@ -54,12 +54,13 @@ const mostrarTodos = ref(false)
 
 onMounted(async () => {
     try {
-        const resposta = await getProdutos()
-        produtos.value = resposta
+        // Buscar apenas produtos do admin (id 228)
+        const resposta = await api.get('/products/user/228')
+        produtos.value = resposta.data
     } catch (e) {
         erro.value = 'Erro ao carregar produtos'
     } finally {
-    carregando.value = false
+        carregando.value = false
     }
 })
 
