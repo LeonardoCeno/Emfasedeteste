@@ -1,26 +1,26 @@
 <template>
     <div class="tudo" >
-        <button v-if="!mostraFormulario" class="nova-categoria-btn" @click="mostraFormulario = true">Nova categoria</button>
-        <div v-if="mostraFormulario" class="criacao-form-wrapper">
+        <button v-if="!mostraFormulario && !editando" class="nova-categoria-btn" @click="abrirCriacao">Nova categoria</button>
+        <div v-if="mostraFormulario || editando" class="criacao-form-wrapper">
             <div class="criacao-form">
-                <h2>Criar Categoria</h2>
-                <form @submit.prevent="criarCategoria">
+                <h2>{{ editando ? 'Editar Categoria' : 'Criar Categoria' }}</h2>
+                <form @submit.prevent="editando ? atualizarCategoria() : criarCategoria()">
                     <div>
                         <label>Nome:</label>
-                        <input v-model="nome" required />
+                        <input v-model="nomeForm" required />
                     </div>
                     <div>
                         <label>Descrição:</label>
-                        <textarea v-model="descricao" required></textarea>
+                        <textarea v-model="descricaoForm" required></textarea>
                     </div>
                     <div>
                         <label>Imagem:</label>
                         <input type="file" @change="onFileChange" accept="image/*" />
                     </div>
-                    <button type="submit">Criar Categoria</button>
-                    <button type="button" @click="fecharFormulario">Cancelar</button>
+                    <button type="submit">{{ editando ? 'Salvar' : 'Criar Categoria' }}</button>
+                    <button type="button" @click="editando ? cancelarEdicao() : fecharFormulario()">Cancelar</button>
                 </form>
-                <p v-if="mensagem">{{ mensagem }}</p>
+                <p v-if="editando ? mensagemEdicao : mensagem">{{ editando ? mensagemEdicao : mensagem }}</p>
             </div>
         </div>
         <div class="categorias" >
@@ -38,32 +38,12 @@
             </li>
         </ul>
         </div>
-        <div v-if="editando">
-            <h3>Editar Categoria</h3>
-            <form @submit.prevent="atualizarCategoria">
-                <div>
-                    <label>Nome:</label>
-                    <input v-model="editNome" required />
-                </div>
-                <div>
-                    <label>Descrição:</label>
-                    <textarea v-model="editDescricao" required></textarea>
-                </div>
-                <div>
-                    <label>Imagem:</label>
-                    <input type="file" @change="onEditFileChange" accept="image/*" />
-                </div>
-                <button type="submit">Salvar</button>
-                <button type="button" @click="cancelarEdicao">Cancelar</button>
-            </form>
-            <p v-if="mensagemEdicao">{{ mensagemEdicao }}</p>
-        </div>
         </div>
     </div>
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, watch } from 'vue'
 import api from '../services/api'
 
 const apiBase = 'http://35.196.79.227:8000'
@@ -86,31 +66,50 @@ const mensagemEdicao = ref('')
 
 const mostraFormulario = ref(false)
 
+// Campos do formulário (usados para ambos os casos)
+const nomeForm = ref('')
+const descricaoForm = ref('')
+const imagemForm = ref(null)
+
+watch(editando, (novo) => {
+    if (novo) {
+        nomeForm.value = editNome.value
+        descricaoForm.value = editDescricao.value
+        imagemForm.value = null
+    } else {
+        nomeForm.value = ''
+        descricaoForm.value = ''
+        imagemForm.value = null
+    }
+})
+
 onMounted(async () => {
     await carregarCategorias()
 })
 
 function onFileChange(e) {
     imagem.value = e.target.files[0]
+    imagemForm.value = e.target.files[0]
 }
 function onEditFileChange(e) {
     editImagem.value = e.target.files[0]
+    imagemForm.value = e.target.files[0]
 }
 
 async function criarCategoria() {
     mensagem.value = ''
     try {
         const formData = new FormData()
-        formData.append('name', nome.value)
-        formData.append('description', descricao.value)
-        if (imagem.value) formData.append('image', imagem.value)
+        formData.append('name', nomeForm.value)
+        formData.append('description', descricaoForm.value)
+        if (imagemForm.value) formData.append('image', imagemForm.value)
         await api.post('/categories/', formData, {
             headers: { 'Content-Type': 'multipart/form-data' }
         })
         mensagem.value = 'Categoria criada com sucesso!'
-        nome.value = ''
-        descricao.value = ''
-        imagem.value = null
+        nomeForm.value = ''
+        descricaoForm.value = ''
+        imagemForm.value = null
         await carregarCategorias()
         fecharFormulario()
     } catch (e) {
@@ -137,11 +136,16 @@ async function carregarCategorias() {
 
 function editarCategoria(cat) {
     editando.value = true
+    mostraFormulario.value = false
     editId.value = cat.id
     editNome.value = cat.name
     editDescricao.value = cat.description
     editImagem.value = null
     mensagemEdicao.value = ''
+    nomeForm.value = cat.name
+    descricaoForm.value = cat.description
+    imagemForm.value = null
+    mostraFormulario.value = true
 }
 function cancelarEdicao() {
     editando.value = false
@@ -150,20 +154,23 @@ function cancelarEdicao() {
     editDescricao.value = ''
     editImagem.value = null
     mensagemEdicao.value = ''
+    mostraFormulario.value = false
+    nomeForm.value = ''
+    descricaoForm.value = ''
+    imagemForm.value = null
 }
 
 async function atualizarCategoria() {
     mensagemEdicao.value = ''
     try {
         await api.put(`/categories/${editId.value}`, {
-            name: editNome.value,
-            description: editDescricao.value
+            name: nomeForm.value,
+            description: descricaoForm.value
         })
-    // Atualizar imagem se houver
-    if (editImagem.value) {
-        const formData = new FormData()
-        formData.append('image', editImagem.value)
-        await api.put(`/categories/${editId.value}/image`, formData, {
+        if (imagemForm.value) {
+            const formData = new FormData()
+            formData.append('image', imagemForm.value)
+            await api.put(`/categories/${editId.value}/image`, formData, {
             headers: { 'Content-Type': 'multipart/form-data' }
             })
         }
@@ -187,9 +194,18 @@ async function excluirCategoria(id) {
 
 function fecharFormulario() {
     mostraFormulario.value = false
-    nome.value = ''
-    descricao.value = ''
-    imagem.value = null
+    nomeForm.value = ''
+    descricaoForm.value = ''
+    imagemForm.value = null
+    mensagem.value = ''
+}
+
+function abrirCriacao() {
+    editando.value = false
+    mostraFormulario.value = true
+    nomeForm.value = ''
+    descricaoForm.value = ''
+    imagemForm.value = null
     mensagem.value = ''
 }
 </script>
