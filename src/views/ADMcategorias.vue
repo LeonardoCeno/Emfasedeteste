@@ -308,7 +308,7 @@ function abrirCriacao() {
 }
 
 .categorias {
-    width: 70vw;
+    width: 72vw;
     height: 30%;
     margin-top: 20px;
 }
@@ -323,7 +323,8 @@ function abrirCriacao() {
     list-style: none;
     padding: 0;
     margin: 0;
-    margin-bottom: 70px;
+    max-height: 65vh;
+    overflow-y: auto;
 }
 
 .categorias li {
