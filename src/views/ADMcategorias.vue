@@ -1,6 +1,5 @@
 <template>
     <div class="tudo" >
-        <button class="nova-categoria-btn" @click="abrirCriacao">Nova categoria</button>
         <div v-if="mostraFormulario || editando" class="criacao-form-wrapper">
             <div class="criacao-form">
                 <h2>{{ editando ? 'Editar Categoria' : 'Criar Categoria' }}</h2>
@@ -24,7 +23,9 @@
             </div>
         </div>
         <div class="categorias" >
-        <h3 style="margin-top:2rem">Categorias</h3>
+            <div class="botoes" >
+                <h3>Categorias</h3> <button class="nova-categoria-btn" @click="abrirCriacao">Nova categoria</button>
+            </div>
         <div v-if="carregandoCategorias">Carregando categorias...</div>
         <div v-else-if="erroCategorias">{{ erroCategorias }}</div>
         <div v-else>
@@ -218,11 +219,10 @@ function abrirCriacao() {
     width: 100%;
     height: 100%;
     background-color: #ffffff;
-    padding: 40px 0px 0px 70px;
+    padding: 50px 0px 0px 70px;
 }
 
 .nova-categoria-btn {
-    margin-bottom: 20px;
     padding: 10px 20px;
     font-size: 1.2rem;
     background-color: #4CAF50;
@@ -292,7 +292,6 @@ function abrirCriacao() {
     border-radius: 5px;
     cursor: pointer;
     font-size: 1.1rem;
-    margin: 10px;
 }
 
 .criacao-form button:hover {
@@ -307,20 +306,29 @@ function abrirCriacao() {
     background-color: #da190b;
 }
 
+.criacao-form form {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.criacao-form form button {
+    margin-right: 10px;
+    margin-bottom: 0;
+}
+
 .categorias {
     width: 72vw;
     height: 30%;
-    margin-top: 20px;
 }
 
-.categorias h3 {
+.botoes h3 {
     font-size: 2.5rem;
     font-family: helvetica;
-    margin-bottom: 15px;
 }
 
 .categorias ul {
-    max-height: 65vh;
+    max-height: 70vh;
     overflow-y: auto;
 }
 
@@ -402,54 +410,11 @@ function abrirCriacao() {
     background-color: #b71c1c !important;
 }
 
-@media (max-width: 950px) {
-  .tudo {
-    padding: 20px 0 0 10px;
-  }
-  .categorias {
-    width: 95vw;
-  }
-}
-
-@media (max-width: 768px) {
-  .tudo {
-    padding: 10px 0 0 0;
-    width: 100vw;
-  }
-  .categorias {
-    width: 99vw;
-    margin-top: 10px;
-  }
-  .categorias h3 {
-    font-size: 1.5rem;
-  }
-  .categorias ul {
-    max-height: 40vh;
-  }
-  .criacao-form {
-    max-width: 98vw;
-    padding: 10px;
-  }
-}
-
-@media (max-width: 550px) {
-  .tudo {
-    padding: 2vw 0 0 0;
-  }
-  .categorias {
-    width: 100vw;
-    margin-top: 5px;
-  }
-  .categorias h3 {
-    font-size: 1.1rem;
-  }
-  .categorias ul {
-    max-height: 30vh;
-  }
-  .criacao-form {
-    max-width: 100vw;
-    padding: 2vw;
-  }
+.botoes {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
 }
 
 </style>
