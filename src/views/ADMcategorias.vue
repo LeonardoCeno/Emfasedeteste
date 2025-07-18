@@ -1,6 +1,6 @@
 <template>
     <div class="tudo" >
-        <button v-if="!mostraFormulario && !editando" class="nova-categoria-btn" @click="abrirCriacao">Nova categoria</button>
+        <button class="nova-categoria-btn" @click="abrirCriacao">Nova categoria</button>
         <div v-if="mostraFormulario || editando" class="criacao-form-wrapper">
             <div class="criacao-form">
                 <h2>{{ editando ? 'Editar Categoria' : 'Criar Categoria' }}</h2>
@@ -24,17 +24,20 @@
             </div>
         </div>
         <div class="categorias" >
-        <h3 style="margin-top:2rem">Categorias do ADMIN (id 228)</h3>
+        <h3 style="margin-top:2rem">Categorias</h3>
         <div v-if="carregandoCategorias">Carregando categorias...</div>
         <div v-else-if="erroCategorias">{{ erroCategorias }}</div>
         <div v-else>
         <div v-if="categorias.length === 0">Nenhuma categoria cadastrada ainda.</div>
         <ul v-else>
             <li v-for="cat in categorias" :key="cat.id">
-                <img v-if="cat.image_path" :src="cat.image_path.startsWith('http') ? cat.image_path : apiBase + cat.image_path" alt="Imagem da categoria" style="max-width:40px;max-height:40px;vertical-align:middle;margin-right:8px;"/>
-                <b>{{ cat.name }}</b> - {{ cat.description }}
+                <div class="separador" >
+                <img v-if="cat.image_path" :src="cat.image_path.startsWith('http') ? cat.image_path : apiBase + cat.image_path" alt="Imagem da categoria" style="width:50px;height:50px;vertical-align:middle;margin-right:8px;"/>
+                <b>{{ cat.name }}</b> </div> - {{ cat.description }}
+                <div class="BTli" >
                 <button @click="editarCategoria(cat)">Editar</button>
-                <button @click="excluirCategoria(cat.id)">Excluir</button>
+                <button class="excluir-btn" @click="excluirCategoria(cat.id)">Excluir</button>
+                </div>
             </li>
         </ul>
         </div>
@@ -217,7 +220,7 @@ function abrirCriacao() {
     flex-direction: column;
     width: 100%;
     height: 100%;
-    background-color: #c0c0c0;
+    background-color: #ffffff;
     padding: 40px 0px 0px 70px;
 }
 
@@ -308,13 +311,13 @@ function abrirCriacao() {
 }
 
 .categorias {
-    width: 100%;
+    width: 70vw;
     height: 30%;
     margin-top: 20px;
 }
 
 .categorias h3 {
-    font-size: 2rem;
+    font-size: 2.5rem;
     font-family: helvetica;
     margin-bottom: 15px;
 }
@@ -326,14 +329,15 @@ function abrirCriacao() {
 }
 
 .categorias li {
-    background-color: #e0e0e0;
+    background-color: #d6d6d6;
     padding: 15px;
     margin-bottom: 10px;
-    border-radius: 8px;
+    border-radius: 7px;
     display: flex;
     align-items: center;
     justify-content: space-between;
     font-size: 1.1rem;
+    border: 1px solid #a9b5b6;
 }
 
 .categorias li img {
@@ -375,6 +379,25 @@ function abrirCriacao() {
     font-size: 1.1rem;
     color: #555;
     margin-top: 10px;
+}
+
+.BTli {
+    display: flex;
+    gap: 5vw;
+}
+
+.separador {
+    display: flex;
+    align-items: center;
+    gap: 4vw;
+}
+
+.excluir-btn {
+    background-color: #dc3545 !important;
+    color: white !important;
+}
+.excluir-btn:hover {
+    background-color: #b71c1c !important;
 }
 
 </style>
