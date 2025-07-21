@@ -36,7 +36,7 @@
         </div>
         <div class="topo-mobile mobile">
             <a class="logo" href="">
-            <img src="../components/img/ManyaLogo-Photoroom.png" alt="" />
+            <img src="../components/img/agrsimtabao-Photoroom.png" alt="" />
             </a>
             <div class="botoes">
                 <router-link v-if="!isLoggedIn" to="/login">   
@@ -199,6 +199,7 @@ input::placeholder {
 
 .botoes p {
     font-weight: bold;
+    font-size: 16px;
 }
 
 button {
@@ -213,7 +214,7 @@ button {
     cursor: pointer;
     transition: color 0.1s;
     font-weight: 500;
-    font-size: 14px;
+    font-size: 15px;
     height: 55px;
 }
 
@@ -229,6 +230,11 @@ button img {
 
 button:hover img {
     filter: invert(45%) sepia(65%) saturate(1000%) hue-rotate(160deg) brightness(105%) contrast(100%);
+}
+
+.botoes img {
+    width: 24px;
+    height: 24px;
 }
 
 .mobile {
@@ -261,8 +267,13 @@ button:hover img {
     }
 
     .topo-mobile .logo img {
-        height: 7vh;
-        filter: brightness(15%);
+        height: 60px;
+        filter: brightness(20%);
+    }
+
+    .topo-mobile .logo img:hover {
+        transition: 0.4s ease-in-out;
+        filter: brightness(65%);
     }
 
     .input {
