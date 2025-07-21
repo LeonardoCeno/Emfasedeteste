@@ -55,17 +55,18 @@
     <div v-else-if="erroProdutos">{{ erroProdutos }}</div>
     <div v-else>
       <div v-if="produtos.length === 0">Nenhum produto cadastrado ainda.</div>
-      <ul v-else>
-        <li v-for="produto in produtosFiltrados" :key="produto.id">
-          <div class="separador">
-            <img v-if="produto.image_path" :src="produto.image_path" alt="Imagem do produto" />
-            <b>{{ produto.name }}</b>
+      <ul v-else class="lista">
+        <li v-for="produto in produtosFiltrados" :key="produto.id" class="produto">
+          <div class="nome-preco-imagem">
+            <img v-if="produto.image_path" :src="produto.image_path" alt="Imagem do produto" class="produto-imagem" />
+            <h4>{{ produto.name }}</h4>
+            <p>R$ {{ produto.price }}</p>
           </div>
-          - R$ {{ produto.price }} (Estoque: {{ produto.stock }})
           <div class="BTli">
             <button @click="editarProduto(produto)">Editar</button>
             <button class="excluir-btn" @click="excluirProduto(produto.id)">Excluir</button>
           </div>
+          <span style="font-size:12px;color:#555;">Estoque: {{ produto.stock }}</span>
         </li>
       </ul>
     </div>
@@ -431,19 +432,9 @@ li {
   font-size: 1.1rem;
   border: 1px solid #a9b5b6;
 }
-li img {
-  width: 50px;
-  height: 50px;
-  object-fit: cover;
-  aspect-ratio: 1/1;
-  border-radius: 50%;
-  background: #fff;
-  border: 1px solid #ccc;
-  margin-right: 8px;
-}
 .BTli {
   display: flex;
-  gap: 5vw;
+  gap: 1vw;
 }
 .excluir-btn {
   background-color: #dc3545 !important;
@@ -471,10 +462,6 @@ li img {
 .BTli button:hover {
   background-color: #5a6268;
 }
-.separador {
-  display: flex;
-  align-items: center;
-}
 .linha-dupla {
   display: flex;
   gap: 16px;
@@ -501,5 +488,55 @@ li img {
     align-items: stretch;
     gap: 6px;
   }
+}
+.nome-preco-imagem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.nome-preco-imagem p {
+  font-size: 22px;
+  color: rgb(49, 49, 49);
+  font-weight: bold;
+}
+.nome-preco-imagem img {
+  margin-top: 10px;
+  height: 225px;
+  width: 160px;
+  border: 0.1px solid rgb(212, 212, 212);
+  filter: contrast(100%);
+}
+.produto {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  text-align: center;
+  width: 230px;
+  height: 92%;
+  margin-top: 3vh;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+.produto:hover .add {
+  opacity: 1;
+  pointer-events: auto;
+}
+.produto:hover {
+  background-color: rgb(209, 209, 209);
+}
+.produto h4 {
+  font-family: 'Roboto', sans-serif;
+  font-size: 15px;
+  color: rgb(65, 65, 65);
+  margin-top: 10px;
+  height: 40px;
+}
+.lista {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  justify-items: center;
+  padding: 4px;
+  gap: 5px;
+  position: relative;
 }
 </style>
