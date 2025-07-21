@@ -13,13 +13,14 @@
     <div v-else-if="erro" class="erro">{{ erro }}</div>
     <div class="lista" v-else>
         <div class="produto" v-for="produto in produtosVisiveis" :key="produto.id">
-        <div class="nome-preco" >
+        <div class="nome-preco-imagem" >
         <img :src="produto.image_path" alt="Imagem do produto" class="produto-imagem" />
         <h4>{{ produto.name }}</h4>
         <p>R$ {{ produto.price }}</p>
         </div>
         <div class="add">
         <button><img src="./img/maisumcarrinho.png" alt=""><p>Adicionar</p></button>
+        <img src="./img/coraçaofav.png" alt="">
         </div>
     </div>
     </div>
@@ -37,13 +38,14 @@
     <div v-else-if="erro" class="erro">{{ erro }}</div>
     <div class="lista" v-else>
         <div class="produto" v-for="produto in produtosVisiveis" :key="produto.id">
-        <div class="nome-preco" >
+        <div class="nome-preco-imagem" >
         <img :src="produto.image_path" alt="Imagem do produto" class="produto-imagem" />
         <h4>{{ produto.name }}</h4>
         <p>R$ {{ produto.price }}</p>
         </div>
         <div class="add" >
         <button><img src="./img/maisumcarrinho.png" alt=""><p>Adicionar</p></button>
+        <img src="./img/coraçaofav.png" alt="">
         </div>
     </div>
     </div>
@@ -80,7 +82,7 @@ onMounted(async () => {
 })
 
 const produtosVisiveis = computed(() => {
-    return mostrarTodos.value ? produtos.value : produtos.value.slice(0, 8)
+    return mostrarTodos.value ? produtos.value : produtos.value.slice(0, 10)
 })
 
 
@@ -120,24 +122,23 @@ const produtosVisiveis = computed(() => {
     width: 87vw;
 }
 
-.nome-preco {
+.nome-preco-imagem {
     display: flex;
     flex-direction: column;
     align-items: center;
 }
 
-.nome-preco p {
-    font-size: 20px;
-    color: rgb(63, 63, 63);
-    margin-top: 5px;
+.nome-preco-imagem p {
+    font-size: 22px;
+    color: rgb(49, 49, 49);
     font-weight: bold;
 }
 
-.nome-preco img {
+.nome-preco-imagem img {
     margin-top: 10px;
-    height: 210px;
-    width: 151px;
-    border: 1px solid rgb(156, 156, 156);
+    height: 225px;
+    width: 160px;
+    border: 0.1px solid rgb(212, 212, 212);
 }
 
 .add {
@@ -146,16 +147,23 @@ const produtosVisiveis = computed(() => {
     width: 100%;
     align-items: center;
     justify-content: center;
+    gap: 12px;
+    opacity: 0;
+    pointer-events: none;
+    margin-top: 5px;
+    margin-bottom: 10px;
+    padding-bottom: 10px;
 }
 
 .add button {
     display: flex;
     align-items: center;
     background-color: #030a11f5;
-    justify-items: center;
+    justify-content: center;
     padding: 8px;
     border-radius: 7px;
     gap: 7px;
+    width: 150px;
 }
 
 .add button:hover {
@@ -173,25 +181,43 @@ const produtosVisiveis = computed(() => {
     filter: invert(1);
 }
 
+.add img {
+    width: 20px;
+    height: auto;
+    filter: invert(6%) sepia(50%) saturate(200%) hue-rotate(160deg) brightness(100%) contrast(100%);
+}
+
+.add img:hover {
+    opacity: 0.9;
+}
+
 .produto {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     text-align: center;
-    width: 200px;
+    width: 230px;
     height: 92%;
-    margin-bottom: 5vh;
+    margin-bottom: 3vh;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.produto:hover .add {
+    opacity: 1;
+    pointer-events: auto;
 }
 
 .produto:hover {
-    border: 0.2px solid rgb(165, 165, 165);
+    background-color: rgb(209, 209, 209);
 }
 
 .produto h4 {
     font-family: 'Roboto', sans-serif;
-    font-size: 14px;
-    color: rgb(41, 41, 41);
+    font-size: 15px;
+    color: rgb(65, 65, 65);
     margin-top: 10px;
+    height: 40px;
 }
 
 .lista {
@@ -199,35 +225,33 @@ const produtosVisiveis = computed(() => {
     grid-template-columns: repeat(5, 1fr);
     justify-items: center;
     padding: 4px;
-    gap: 10px;
+    gap: 5px;
     position: relative;
 }
 
 .mostrar-mais {
     display: block;
-    margin-bottom: 90px;
+    margin-bottom: 50px;
     padding: 6px 18px;
-    background: none;
-    color: #111;
-    border: none;
-    border-radius: 0;
-    font-size: 0.98rem;
+    background-color: #010203ec;
+    color: #fcfcfc;
+    border-radius: 4px;
+    font-size: 1rem;
     font-weight: bold;
     cursor: pointer;
-    box-shadow: none;
-    text-decoration: underline;
     position: relative;
-    left: 0;
+    left: 10px;
 }
 .mostrar-mais:hover {
-    background-color: rgb(190, 190, 190);
+    background-color: #02060ace;
+    text-decoration: underline;
 }
 
 .soumdetalhe {
     width: 87vw;
-    margin-bottom: 40px;
+    margin-bottom: 10px;
     height: 1px;
-    background-color: #5a5a5a;
+    background-color: #888888;
 }
 
 .comercial img {
