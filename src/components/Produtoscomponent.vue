@@ -139,6 +139,7 @@ const produtosVisiveis = computed(() => {
     height: 225px;
     width: 160px;
     border: 0.1px solid rgb(212, 212, 212);
+    filter: contrast(100%);
 }
 
 .add {
@@ -198,7 +199,7 @@ const produtosVisiveis = computed(() => {
     text-align: center;
     width: 230px;
     height: 92%;
-    margin-bottom: 3vh;
+    margin-top: 3vh;
     padding-left: 10px;
     padding-right: 10px;
 }
@@ -249,7 +250,6 @@ const produtosVisiveis = computed(() => {
 
 .soumdetalhe {
     width: 87vw;
-    margin-bottom: 10px;
     height: 1px;
     background-color: #888888;
 }

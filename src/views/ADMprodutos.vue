@@ -222,13 +222,18 @@ function cancelarEdicao() {
 async function atualizarProduto() {
   mensagemEdicao.value = ''
   try {
+    // Atualiza os dados principais do produto
     await api.put(`/products/${editId.value}`, {
       name: nomeForm.value,
       description: descricaoForm.value,
       price: precoForm.value,
-      stock: estoqueForm.value,
       category_id: categoriaIdForm.value
     })
+    // Atualiza o estoque separadamente
+    await api.put(`/products/${editId.value}/stock`, {
+      stock: Number(estoqueForm.value)
+    })
+    // Atualiza a imagem se houver
     if (imagemForm.value) {
       const formData = new FormData()
       formData.append('image', imagemForm.value)
