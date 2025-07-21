@@ -4,7 +4,7 @@
     <div class="menuesquerdo" >
         <router-link to="/dados"> <button>Meus dados</button></router-link>
         <router-link to="/carrinho"> <button>Carrinho</button></router-link>
-        <router-link to="/favoritos"> <button>Favortios</button></router-link>
+        <router-link to="/favoritos"> <button>Favoritos</button></router-link>
         <router-link to="/pedidos"> <button>Pedidos</button></router-link>
         <router-link to="/enderecos"> <button>Endereços</button></router-link>
         <router-link to="/cupons"> <button>Cupons</button></router-link>

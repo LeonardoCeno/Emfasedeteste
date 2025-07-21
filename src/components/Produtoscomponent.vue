@@ -13,9 +13,14 @@
     <div v-else-if="erro" class="erro">{{ erro }}</div>
     <div class="lista" v-else>
         <div class="produto" v-for="produto in produtosVisiveis" :key="produto.id">
+        <div class="nome-preco" >
         <img :src="produto.image_path" alt="Imagem do produto" class="produto-imagem" />
-        <h4 class="produto-nome">{{ produto.name }}</h4>
-        <p class="produto-preco">R$ {{ produto.price }}</p>
+        <h4>{{ produto.name }}</h4>
+        <p>R$ {{ produto.price }}</p>
+        </div>
+        <div class="add">
+        <button><img src="./img/maisumcarrinho.png" alt=""><p>Adicionar</p></button>
+        </div>
     </div>
     </div>
     <button v-if="!mostrarTodos && produtos.length > 8" class="mostrar-mais" @click="mostrarTodos = true">Mostrar mais</button>
@@ -32,9 +37,14 @@
     <div v-else-if="erro" class="erro">{{ erro }}</div>
     <div class="lista" v-else>
         <div class="produto" v-for="produto in produtosVisiveis" :key="produto.id">
+        <div class="nome-preco" >
         <img :src="produto.image_path" alt="Imagem do produto" class="produto-imagem" />
-        <h4 class="produto-nome">{{ produto.name }}</h4>
-        <p class="produto-preco">R$ {{ produto.price }}</p>
+        <h4>{{ produto.name }}</h4>
+        <p>R$ {{ produto.price }}</p>
+        </div>
+        <div class="add" >
+        <button><img src="./img/maisumcarrinho.png" alt=""><p>Adicionar</p></button>
+        </div>
     </div>
     </div>
     <button v-if="!mostrarTodos && produtos.length > 8" class="mostrar-mais" @click="mostrarTodos = true">Mostrar mais</button>
@@ -47,6 +57,7 @@
 import { ref, onMounted, computed } from 'vue'
 import api from '../services/api'
 
+const apiBase = 'http://35.196.79.227:8000'
 const produtos = ref([])
 const carregando = ref(true)
 const erro = ref(null)
@@ -54,9 +65,13 @@ const mostrarTodos = ref(false)
 
 onMounted(async () => {
     try {
-        // Buscar apenas produtos do admin (id 228)
         const resposta = await api.get('/products/user/228')
-        produtos.value = resposta.data
+        produtos.value = resposta.data.map(produto => ({
+            ...produto,
+            image_path: produto.image_path && !produto.image_path.startsWith('http')
+                ? apiBase + produto.image_path
+                : produto.image_path
+        }))
     } catch (e) {
         erro.value = 'Erro ao carregar produtos'
     } finally {
@@ -105,26 +120,86 @@ const produtosVisiveis = computed(() => {
     width: 87vw;
 }
 
-.produto {
+.nome-preco {
     display: flex;
     flex-direction: column;
     align-items: center;
-    text-align: center;
-    width: 15vw;
-    height: 25vh;
 }
 
-.produto img {
+.nome-preco p {
+    font-size: 20px;
+    color: rgb(63, 63, 63);
+    margin-top: 5px;
+    font-weight: bold;
+}
+
+.nome-preco img {
+    margin-top: 10px;
+    height: 210px;
+    width: 151px;
+    border: 1px solid rgb(156, 156, 156);
+}
+
+.add {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+}
+
+.add button {
+    display: flex;
+    align-items: center;
+    background-color: #030a11f5;
+    justify-items: center;
+    padding: 8px;
+    border-radius: 7px;
+    gap: 7px;
+}
+
+.add button:hover {
+    background-color: #02060ade;
+}
+
+.add button p {
+    color: white;
+}
+
+.add button img {
+    width: 20px;
     height: auto;
-    width: 20%;
+    border: none;
+    filter: invert(1);
+}
+
+.produto {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    text-align: center;
+    width: 200px;
+    height: 92%;
+    margin-bottom: 5vh;
+}
+
+.produto:hover {
+    border: 0.2px solid rgb(165, 165, 165);
+}
+
+.produto h4 {
+    font-family: 'Roboto', sans-serif;
+    font-size: 14px;
+    color: rgb(41, 41, 41);
+    margin-top: 10px;
 }
 
 .lista {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(5, 1fr);
     justify-items: center;
     padding: 4px;
-    gap: 30px;
+    gap: 10px;
     position: relative;
 }
 

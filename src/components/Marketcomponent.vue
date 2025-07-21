@@ -100,7 +100,7 @@ onMounted(() => {
     position: relative;
     overflow: hidden;
     background-color: rgba(180, 180, 180, 0.658);
-    height: 44vh;
+    height: 46vh;
     min-height: 300px;
     width: 100%;
     max-width: 100vw;
@@ -333,6 +333,6 @@ onMounted(() => {
 
 .espaco2 {
     background-color:  #02060af5;
-    min-height: 0.5vh;
+    min-height: 0.2vh;
 }
 </style>
