@@ -42,14 +42,21 @@
     <div class="produtos" >
     <div class="produtos-header">
       <h3>Produtos</h3>
-      <button class="novo-produto-btn" @click="abrirCriacao">Novo produto</button>
+      <div class="filtro-categorias">
+        <label for="filtroCategoria" style="margin-right: 6px; font-size: 1rem;">Filtrar por categoria:</label>
+        <select id="filtroCategoria" v-model="categoriaSelecionada">
+          <option value="">Todas</option>
+          <option v-for="cat in categorias" :key="cat.id" :value="cat.id">{{ cat.name }}</option>
+        </select>
+        <button class="novo-produto-btn" @click="abrirCriacao">Novo produto</button>
+      </div>
     </div>
     <div v-if="carregandoProdutos">Carregando produtos...</div>
     <div v-else-if="erroProdutos">{{ erroProdutos }}</div>
     <div v-else>
       <div v-if="produtos.length === 0">Nenhum produto cadastrado ainda.</div>
       <ul v-else>
-        <li v-for="produto in produtos" :key="produto.id">
+        <li v-for="produto in produtosFiltrados" :key="produto.id">
           <div class="separador">
             <img v-if="produto.image_path" :src="produto.image_path" alt="Imagem do produto" />
             <b>{{ produto.name }}</b>
@@ -67,7 +74,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, watch } from 'vue'
+import { ref, onMounted, watch, computed } from 'vue'
 import api from '../services/api'
 
 const nome = ref('')
@@ -97,6 +104,13 @@ const precoForm = ref(0)
 const estoqueForm = ref(0)
 const categoriaIdForm = ref('')
 const imagemForm = ref(null)
+
+const categoriaSelecionada = ref('')
+
+const produtosFiltrados = computed(() => {
+  if (!categoriaSelecionada.value) return produtos.value
+  return produtos.value.filter(produto => String(produto.category_id) === String(categoriaSelecionada.value))
+})
 
 watch(editando, (novo) => {
   if (novo) {
@@ -469,5 +483,23 @@ li img {
   flex: 1;
   display: flex;
   flex-direction: column;
+}
+.filtro-categorias {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.filtro-categorias select {
+  padding: 6px 10px;
+  border-radius: 5px;
+  border: 1px solid #bdbdbd;
+  font-size: 1rem;
+}
+@media (max-width: 768px) {
+  .filtro-categorias {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 6px;
+  }
 }
 </style>
