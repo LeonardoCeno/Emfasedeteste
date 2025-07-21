@@ -539,4 +539,17 @@ li {
   gap: 5px;
   position: relative;
 }
+
+@media (max-width: 800px) {
+  .lista {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 550px) {
+  .lista {
+    grid-template-columns: repeat(1, 1fr);
+  }
+}
+
 </style>

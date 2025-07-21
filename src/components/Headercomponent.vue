@@ -143,7 +143,7 @@ header {
 
 .logo img {
     width: auto;
-    height: 14vh;
+    height: 105px;
     filter: brightness(20%);
     transform: rotate(-9deg);
 }
