@@ -5,7 +5,7 @@ const api = axios.create({
 })
 
 export async function getProdutos() {
-  const response = await api.get('/products/')
+  const response = await api.get('/products/user/228')
   
   const produtos = response.data.map(produto => ({
     ...produto,

@@ -1,55 +1,73 @@
 <template>
-  <div>
-    <h2>Criar Produto</h2>
-    <form @submit.prevent="criarProduto">
-      <div>
-        <label>Nome:</label>
-        <input v-model="nome" required />
+  <div class="tudo">
+    <div v-if="mostraFormulario" class="criacao-form-wrapper">
+      <div class="criacao-form">
+        <h2>{{ editando ? 'Editar Produto' : 'Criar Produto' }}</h2>
+        <form @submit.prevent="editando ? atualizarProduto() : criarProduto()">
+          <div>
+            <label>Nome:</label>
+            <input v-model="nomeForm" required />
+          </div>
+          <div>
+            <label>Descrição:</label>
+            <textarea v-model="descricaoForm" required></textarea>
+          </div>
+          <div class="linha-dupla">
+            <div class="campo-metade">
+              <label>Preço:</label>
+              <input type="number" v-model.number="precoForm" min="0" step="0.01" required />
+            </div>
+            <div class="campo-metade">
+              <label>Estoque:</label>
+              <input type="number" v-model.number="estoqueForm" min="0" required />
+            </div>
+          </div>
+          <div>
+            <label>Categoria:</label>
+            <select v-model="categoriaIdForm" required>
+              <option value="" disabled>Selecione</option>
+              <option v-for="cat in categorias" :key="cat.id" :value="cat.id">{{ cat.name }}</option>
+            </select>
+          </div>
+          <div>
+            <label>Imagem:</label>
+            <input type="file" @change="onFileChange" accept="image/*" />
+          </div>
+          <button type="submit">{{ editando ? 'Salvar' : 'Criar Produto' }}</button>
+          <button type="button" @click="editando ? cancelarEdicao() : fecharFormulario()">Cancelar</button>
+        </form>
+        <p v-if="editando ? mensagemEdicao : mensagem">{{ editando ? mensagemEdicao : mensagem }}</p>
       </div>
-      <div>
-        <label>Descrição:</label>
-        <textarea v-model="descricao" required></textarea>
-      </div>
-      <div>
-        <label>Preço:</label>
-        <input type="number" v-model.number="preco" min="0" step="0.01" required />
-      </div>
-      <div>
-        <label>Estoque:</label>
-        <input type="number" v-model.number="estoque" min="0" required />
-      </div>
-      <div>
-        <label>Categoria:</label>
-        <select v-model="categoriaId" required>
-          <option value="" disabled>Selecione</option>
-          <option v-for="cat in categorias" :key="cat.id" :value="cat.id">{{ cat.name }}</option>
-        </select>
-      </div>
-      <div>
-        <label>Imagem:</label>
-        <input type="file" @change="onFileChange" accept="image/*" />
-      </div>
-      <button type="submit">Criar Produto</button>
-    </form>
-    <p v-if="mensagem">{{ mensagem }}</p>
-
-    <h3 style="margin-top:2rem">Produtos do ADMIN (id 228)</h3>
+    </div>
+    <div class="produtos" >
+    <div class="produtos-header">
+      <h3>Produtos</h3>
+      <button class="novo-produto-btn" @click="abrirCriacao">Novo produto</button>
+    </div>
     <div v-if="carregandoProdutos">Carregando produtos...</div>
     <div v-else-if="erroProdutos">{{ erroProdutos }}</div>
     <div v-else>
       <div v-if="produtos.length === 0">Nenhum produto cadastrado ainda.</div>
       <ul v-else>
         <li v-for="produto in produtos" :key="produto.id">
-          <img :src="produto.image_path" alt="Imagem do produto" style="max-width:60px;max-height:60px;vertical-align:middle;margin-right:8px;"/>
-          <b>{{ produto.name }}</b> - R$ {{ produto.price }} (Estoque: {{ produto.stock }})
+          <div class="separador">
+            <img v-if="produto.image_path" :src="produto.image_path" alt="Imagem do produto" />
+            <b>{{ produto.name }}</b>
+          </div>
+          - R$ {{ produto.price }} (Estoque: {{ produto.stock }})
+          <div class="BTli">
+            <button @click="editarProduto(produto)">Editar</button>
+            <button class="excluir-btn" @click="excluirProduto(produto.id)">Excluir</button>
+          </div>
         </li>
       </ul>
+    </div>
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, watch } from 'vue'
 import api from '../services/api'
 
 const nome = ref('')
@@ -60,15 +78,46 @@ const categoriaId = ref('')
 const imagem = ref(null)
 const categorias = ref([])
 const mensagem = ref('')
+const mostraFormulario = ref(false)
 
-// Produtos do admin
-const produtos = ref([])
-const carregandoProdutos = ref(true)
-const erroProdutos = ref('')
+// Edição
+const editando = ref(false)
+const editId = ref(null)
+const editNome = ref('')
+const editDescricao = ref('')
+const editPreco = ref(0)
+const editEstoque = ref(0)
+const editCategoriaId = ref('')
+const editImagem = ref(null)
+const mensagemEdicao = ref('')
+
+const nomeForm = ref('')
+const descricaoForm = ref('')
+const precoForm = ref(0)
+const estoqueForm = ref(0)
+const categoriaIdForm = ref('')
+const imagemForm = ref(null)
+
+watch(editando, (novo) => {
+  if (novo) {
+    nomeForm.value = editNome.value
+    descricaoForm.value = editDescricao.value
+    precoForm.value = editPreco.value
+    estoqueForm.value = editEstoque.value
+    categoriaIdForm.value = editCategoriaId.value
+    imagemForm.value = null
+  } else {
+    nomeForm.value = ''
+    descricaoForm.value = ''
+    precoForm.value = 0
+    estoqueForm.value = 0
+    categoriaIdForm.value = ''
+    imagemForm.value = null
+  }
+})
 
 onMounted(async () => {
   try {
-    // Buscar apenas as categorias do admin 228
     const { data } = await api.get('/categories/user/228')
     categorias.value = data
   } catch (e) {
@@ -79,33 +128,137 @@ onMounted(async () => {
 
 function onFileChange(e) {
   imagem.value = e.target.files[0]
+  imagemForm.value = e.target.files[0]
+}
+function onEditFileChange(e) {
+  editImagem.value = e.target.files[0]
+  imagemForm.value = e.target.files[0]
+}
+
+function abrirCriacao() {
+  editando.value = false
+  mostraFormulario.value = true
+  nomeForm.value = ''
+  descricaoForm.value = ''
+  precoForm.value = 0
+  estoqueForm.value = 0
+  categoriaIdForm.value = ''
+  imagemForm.value = null
+  mensagem.value = ''
+}
+
+function fecharFormulario() {
+  mostraFormulario.value = false
+  editando.value = false
+  nomeForm.value = ''
+  descricaoForm.value = ''
+  precoForm.value = 0
+  estoqueForm.value = 0
+  categoriaIdForm.value = ''
+  imagemForm.value = null
+  mensagem.value = ''
+  mensagemEdicao.value = ''
 }
 
 async function criarProduto() {
   mensagem.value = ''
   try {
     const formData = new FormData()
-    formData.append('name', nome.value)
-    formData.append('description', descricao.value)
-    formData.append('price', preco.value)
-    formData.append('stock', estoque.value)
-    formData.append('category_id', categoriaId.value)
-    if (imagem.value) formData.append('image', imagem.value)
+    formData.append('name', nomeForm.value)
+    formData.append('description', descricaoForm.value)
+    formData.append('price', precoForm.value)
+    formData.append('stock', estoqueForm.value)
+    formData.append('category_id', categoriaIdForm.value)
+    if (imagemForm.value) formData.append('image', imagemForm.value)
     await api.post('/products/', formData, {
       headers: { 'Content-Type': 'multipart/form-data' }
     })
     mensagem.value = 'Produto criado com sucesso!'
-    nome.value = ''
-    descricao.value = ''
-    preco.value = 0
-    estoque.value = 0
-    categoriaId.value = ''
-    imagem.value = null
     await carregarProdutos()
+    fecharFormulario()
   } catch (e) {
     mensagem.value = 'Erro ao criar produto.'
   }
 }
+
+function editarProduto(produto) {
+  editando.value = true
+  mostraFormulario.value = false
+  editId.value = produto.id
+  editNome.value = produto.name
+  editDescricao.value = produto.description
+  editPreco.value = produto.price
+  editEstoque.value = produto.stock
+  editCategoriaId.value = produto.category_id
+  editImagem.value = null
+  mensagemEdicao.value = ''
+  nomeForm.value = produto.name
+  descricaoForm.value = produto.description
+  precoForm.value = produto.price
+  estoqueForm.value = produto.stock
+  categoriaIdForm.value = produto.category_id
+  imagemForm.value = null
+  mostraFormulario.value = true
+}
+function cancelarEdicao() {
+  editando.value = false
+  editId.value = null
+  editNome.value = ''
+  editDescricao.value = ''
+  editPreco.value = 0
+  editEstoque.value = 0
+  editCategoriaId.value = ''
+  editImagem.value = null
+  mensagemEdicao.value = ''
+  mostraFormulario.value = false
+  nomeForm.value = ''
+  descricaoForm.value = ''
+  precoForm.value = 0
+  estoqueForm.value = 0
+  categoriaIdForm.value = ''
+  imagemForm.value = null
+}
+
+async function atualizarProduto() {
+  mensagemEdicao.value = ''
+  try {
+    await api.put(`/products/${editId.value}`, {
+      name: nomeForm.value,
+      description: descricaoForm.value,
+      price: precoForm.value,
+      stock: estoqueForm.value,
+      category_id: categoriaIdForm.value
+    })
+    if (imagemForm.value) {
+      const formData = new FormData()
+      formData.append('image', imagemForm.value)
+      await api.put(`/products/${editId.value}/image`, formData, {
+        headers: { 'Content-Type': 'multipart/form-data' }
+      })
+    }
+    mensagemEdicao.value = 'Produto atualizado com sucesso!'
+    await carregarProdutos()
+    cancelarEdicao()
+  } catch (e) {
+    mensagemEdicao.value = 'Erro ao atualizar produto.'
+  }
+}
+
+async function excluirProduto(id) {
+  if (confirm('Tem certeza que deseja excluir este produto?')) {
+    try {
+      await api.delete(`/products/${id}`)
+      mensagem.value = 'Produto excluído com sucesso!'
+      await carregarProdutos()
+    } catch (e) {
+      mensagem.value = 'Erro ao excluir produto.'
+    }
+  }
+}
+
+const produtos = ref([])
+const carregandoProdutos = ref(true)
+const erroProdutos = ref('')
 
 async function carregarProdutos() {
   carregandoProdutos.value = true
@@ -127,24 +280,189 @@ async function carregarProdutos() {
 </script>
 
 <style scoped>
-form {
+.tudo {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+    background-color: #ffffff;
+    padding: 50px 0px 0px 70px;
+}
+
+.produtos {
+  width: 72vw;
+  height: 30%;
+}
+
+.novo-produto-btn {
+  padding: 10px 20px;
+  font-size: 1.2rem;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  align-self: flex-start;
+}
+.novo-produto-btn:hover {
+  background-color: #45a049;
+}
+.criacao-form-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+  overflow: auto;
+}
+.criacao-form {
+  background-color: #fff;
+  padding: 32px 24px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+  width: 98vw;
+  max-width: 540px;
+  max-height: 90vh;
+  overflow-y: auto;
+  text-align: center;
   display: flex;
   flex-direction: column;
-  gap: 1rem;
-  max-width: 400px;
+  justify-content: flex-start;
 }
-button {
-  width: fit-content;
-  padding: 0.5rem 1rem;
+.criacao-form h2 {
+  font-size: 2.5rem;
+  font-family: helvetica;
+  margin-bottom: 20px;
 }
+.criacao-form label {
+  display: block;
+  margin-bottom: 10px;
+  font-size: 1.1rem;
+  font-weight: bold;
+}
+.criacao-form input[type="text"],
+.criacao-form textarea,
+.criacao-form input[type="file"],
+.criacao-form input[type="number"],
+.criacao-form select {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 1rem;
+}
+.criacao-form button {
+  background-color: #4CAF50;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1.1rem;
+  margin-right: 10px;
+}
+.criacao-form button:last-child {
+  background-color: #f44336;
+}
+.criacao-form button:last-child:hover {
+  background-color: #da190b;
+}
+.criacao-form form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.criacao-form form button {
+  margin-right: 10px;
+  margin-bottom: 0;
+}
+.produtos-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 25px;
+    border-bottom: 1px solid rgb(134, 134, 134);
+}
+.produtos-header h3 {
+  font-size: 2.5rem;
+  font-family: helvetica;
+}
+
 ul {
   margin-top: 1rem;
   padding-left: 0;
   list-style: none;
+  max-height: 70vh;
+  overflow-y: auto;
 }
 li {
-  margin-bottom: 0.5rem;
+  background-color: #d6d6d6;
+  padding: 15px;
+  margin-bottom: 10px;
+  border-radius: 7px;
   display: flex;
   align-items: center;
+  justify-content: space-between;
+  font-size: 1.1rem;
+  border: 1px solid #a9b5b6;
+}
+li img {
+  width: 50px;
+  height: 50px;
+  object-fit: cover;
+  aspect-ratio: 1/1;
+  border-radius: 50%;
+  background: #fff;
+  border: 1px solid #ccc;
+  margin-right: 8px;
+}
+.BTli {
+  display: flex;
+  gap: 5vw;
+}
+.excluir-btn {
+  background-color: #dc3545 !important;
+  color: white !important;
+  padding: 5px 10px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  margin-left: 10px;
+}
+.excluir-btn:hover {
+  background-color: #b71c1c !important;
+}
+.BTli button {
+  background-color: #6c757d;
+  color: white;
+  padding: 5px 10px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  margin-left: 10px;
+}
+.BTli button:hover {
+  background-color: #5a6268;
+}
+.separador {
+  display: flex;
+  align-items: center;
+}
+.linha-dupla {
+  display: flex;
+  gap: 16px;
+}
+.campo-metade {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
 }
 </style>

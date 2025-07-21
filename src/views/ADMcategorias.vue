@@ -414,7 +414,8 @@ function abrirCriacao() {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-bottom: 20px;
+    margin-bottom: 25px;
+    border-bottom: 1px solid rgb(134, 134, 134);
 }
 
 </style>
