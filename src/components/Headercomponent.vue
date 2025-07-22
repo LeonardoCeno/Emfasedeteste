@@ -127,7 +127,7 @@ header {
     display: flex;
     align-items: center;
     justify-content: center;
-    background: #ffffffcb;
+    background: rgba(207, 207, 207, 0.658);
     min-height: 12vh;
     gap: 6vw;
     flex-wrap: wrap;

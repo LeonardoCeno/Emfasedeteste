@@ -27,6 +27,10 @@
         <button class="nav right" @click="avancar">&#10095;</button>
     </div>
     <div class="espaco2" ></div>
+    <div class="carrosel-linha" >
+        <img src="./img/bannermovimento1.jpeg" alt="">
+        <img src="./img/bannermovimento2.jpeg" alt="">
+    </div>
     <div class="beneficios">
     <div class="item">
         <img src="../components/img/caminhao.png" alt="">
@@ -66,7 +70,7 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import banner1 from './img/CHEGA.png'
-import banner2 from './img/janemsei-Photoroom.png'
+import banner2 from './img/perfect.png'
 import banner3 from './img/LIVRO.png'
 
 const banners = [banner1, banner2, banner3]
@@ -92,6 +96,13 @@ onMounted(() => {
 
 <style scoped>
 
+.carrosel-linha {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+}
+
 .banner {
     display: flex;
     align-items: center;
@@ -99,7 +110,7 @@ onMounted(() => {
     flex-direction: column;
     position: relative;
     overflow: hidden;
-    background-color: rgba(180, 180, 180, 0.658);
+    background-color: rgba(192, 192, 192, 0.658);
     height: 46vh;
     min-height: 300px;
     width: 100%;
@@ -160,6 +171,8 @@ onMounted(() => {
     gap: 12px;
     z-index: 10;
     align-items: center;
+    position: relative;
+    right: 3.5px;
 }
 
 .indicator {
@@ -188,7 +201,8 @@ onMounted(() => {
     align-items: stretch;
     padding: 30px 16px;
     flex-wrap: wrap;
-    margin-top: 20px;
+    margin-top: 10px;
+    margin-bottom: 10px;
 }
 
 .item {

@@ -210,7 +210,7 @@ const produtosVisiveis = computed(() => {
 }
 
 .produto:hover {
-    background-color: rgb(202, 202, 202);
+    background-color: rgb(209, 209, 209);
 }
 
 .produto h4 {
