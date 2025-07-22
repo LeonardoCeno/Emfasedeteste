@@ -26,10 +26,21 @@
         <button class="nav left" @click="voltar">&#10094;</button>
         <button class="nav right" @click="avancar">&#10095;</button>
     </div>
-    <div class="espaco2" ></div>
     <div class="carrosel-linha" >
-        <img src="./img/bannermovimento1.jpeg" alt="">
-        <img src="./img/bannermovimento2.jpeg" alt="">
+        <div class="carrosel-movimento">
+            <img src="./img/bannermovimento1.jpeg" alt="">
+            <img src="./img/bannermovimento2.jpeg" alt="">
+            <img src="./img/bannermovimento1.jpeg" alt="">
+            <img src="./img/bannermovimento2.jpeg" alt="">
+        </div>
+    </div>
+    <div class="carrosel-linha2" >
+        <div class="carrosel-movimento2">
+            <img src="./img/bannermovimento2.jpeg" alt="">
+            <img src="./img/bannermovimento1.jpeg" alt="">
+            <img src="./img/bannermovimento2.jpeg" alt="">
+            <img src="./img/bannermovimento1.jpeg" alt="">
+        </div>
     </div>
     <div class="beneficios">
     <div class="item">
@@ -90,7 +101,7 @@ const irParaBanner = (index) => {
 }
 
 onMounted(() => {
-    setInterval(avancar, 7000)
+    setInterval(avancar, 6000)
 })
 </script>
 
@@ -98,9 +109,38 @@ onMounted(() => {
 
 .carrosel-linha {
     display: flex;
-    justify-content: space-between;
     align-items: center;
-    padding: 10px;
+    overflow: hidden;
+    width: 100%;
+    overflow: hidden;
+}
+.carrosel-movimento {
+    display: flex;
+    animation: deslizar-linha 40s linear infinite;
+    align-items: center;
+}
+
+@keyframes deslizar-linha {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-200%); }
+}
+
+.carrosel-linha2 {
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+    width: 100%;
+    overflow: hidden;
+}
+.carrosel-movimento2 {
+    display: flex;
+    animation: deslizar-linha2 40s linear infinite;
+    align-items: center;
+}
+
+@keyframes deslizar-linha2 {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-200%); }
 }
 
 .banner {
