@@ -210,7 +210,7 @@ const produtosVisiveis = computed(() => {
 }
 
 .produto:hover {
-    background-color: rgb(209, 209, 209);
+    background-color: rgb(202, 202, 202);
 }
 
 .produto h4 {
@@ -261,7 +261,7 @@ const produtosVisiveis = computed(() => {
 
 @media (max-width: 768px) {
     .lista {
-        grid-template-columns: repeat(3, 1fr);
+        grid-template-columns: repeat(2, 1fr);
     }
 }
 

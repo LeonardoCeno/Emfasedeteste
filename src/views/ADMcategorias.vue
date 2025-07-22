@@ -51,8 +51,6 @@ import { ref, onMounted, watch } from 'vue'
 import api from '../services/api'
 
 const apiBase = 'http://35.196.79.227:8000'
-const nome = ref('')
-const descricao = ref('')
 const imagem = ref(null)
 const mensagem = ref('')
 
@@ -91,10 +89,6 @@ onMounted(async () => {
 
 function onFileChange(e) {
     imagem.value = e.target.files[0]
-    imagemForm.value = e.target.files[0]
-}
-function onEditFileChange(e) {
-    editImagem.value = e.target.files[0]
     imagemForm.value = e.target.files[0]
 }
 

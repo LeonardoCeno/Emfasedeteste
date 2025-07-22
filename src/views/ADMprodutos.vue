@@ -78,11 +78,6 @@
 import { ref, onMounted, watch, computed } from 'vue'
 import api from '../services/api'
 
-const nome = ref('')
-const descricao = ref('')
-const preco = ref(0)
-const estoque = ref(0)
-const categoriaId = ref('')
 const imagem = ref(null)
 const categorias = ref([])
 const mensagem = ref('')
@@ -112,6 +107,10 @@ const produtosFiltrados = computed(() => {
   if (!categoriaSelecionada.value) return produtos.value
   return produtos.value.filter(produto => String(produto.category_id) === String(categoriaSelecionada.value))
 })
+
+const produtos = ref([])
+const carregandoProdutos = ref(true)
+const erroProdutos = ref('')
 
 watch(editando, (novo) => {
   if (novo) {
@@ -143,10 +142,6 @@ onMounted(async () => {
 
 function onFileChange(e) {
   imagem.value = e.target.files[0]
-  imagemForm.value = e.target.files[0]
-}
-function onEditFileChange(e) {
-  editImagem.value = e.target.files[0]
   imagemForm.value = e.target.files[0]
 }
 
@@ -237,18 +232,15 @@ function cancelarEdicao() {
 async function atualizarProduto() {
   mensagemEdicao.value = ''
   try {
-    // Atualiza os dados principais do produto
     await api.put(`/products/${editId.value}`, {
       name: nomeForm.value,
       description: descricaoForm.value,
       price: precoForm.value,
       category_id: categoriaIdForm.value
     })
-    // Atualiza o estoque separadamente
     await api.put(`/products/${editId.value}/stock`, {
       stock: Number(estoqueForm.value)
     })
-    // Atualiza a imagem se houver
     if (imagemForm.value) {
       const formData = new FormData()
       formData.append('image', imagemForm.value)
@@ -275,10 +267,6 @@ async function excluirProduto(id) {
     }
   }
 }
-
-const produtos = ref([])
-const carregandoProdutos = ref(true)
-const erroProdutos = ref('')
 
 async function carregarProdutos() {
   carregandoProdutos.value = true

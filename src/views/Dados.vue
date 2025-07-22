@@ -69,6 +69,10 @@ const novoNome = ref('')
 const novoEmail = ref('')
 const novaSenha = ref('')
 
+const nomeInputRef = ref(null)
+const emailInputRef = ref(null)
+const senhaInputRef = ref(null)
+
 function useClickOutside(targetRef, callback) {
     function handler(event) {
         if (targetRef.value && !targetRef.value.contains(event.target)) {
@@ -82,11 +86,6 @@ function useClickOutside(targetRef, callback) {
         document.removeEventListener('mousedown', handler)
     })
 }
-
-const nomeInputRef = ref(null)
-const emailInputRef = ref(null)
-const senhaInputRef = ref(null)
-
 
 useClickOutside(senhaInputRef, () => { if (editandoSenha.value) editandoSenha.value = false })
 
@@ -194,7 +193,6 @@ function editarNome() {
 function editarEmail() {
     editandoEmail.value = true
 }
-
 
 function editarSenha() {
     editandoSenha.value = true
